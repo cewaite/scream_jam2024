@@ -1,0 +1,32 @@
+[gd_scene load_steps=8 format=3 uid="uid://b5qjgpcdrcq8"]
+
+[ext_resource type="PackedScene" uid="uid://c6gcj26dp48a" path="res://assets/old_table/scene.gltf" id="1_c4vbn"]
+[ext_resource type="Texture2D" uid="uid://1v5aepmojj7u" path="res://assets/textures/grunge-wall-texture.jpg" id="1_h322l"]
+[ext_resource type="PackedScene" uid="uid://csjh00djqy723" path="res://assets/old_chair/scene.gltf" id="3_721cq"]
+[ext_resource type="PackedScene" uid="uid://u4mx8gu2sgqm" path="res://assets/older_computer/scene.gltf" id="4_b4kbp"]
+[ext_resource type="PackedScene" uid="uid://bymxbvrqdc105" path="res://assets/low_poly_light_bulb/scene.gltf" id="5_llre0"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_x8qd6"]
+albedo_color = Color(0.47451, 0.47451, 0.47451, 1)
+albedo_texture = ExtResource("1_h322l")
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_dchon"]
+material = SubResource("StandardMaterial3D_x8qd6")
+size = Vector2(200, 200)
+
+[node name="TheRoom" type="Node3D"]
+
+[node name="Floor" type="MeshInstance3D" parent="."]
+mesh = SubResource("PlaneMesh_dchon")
+
+[node name="Table" parent="." instance=ExtResource("1_c4vbn")]
+transform = Transform3D(0.2, 0, 0, 0, 0.146, 0, 0, 0, 0.2, -1, 0, 2)
+
+[node name="Chair" parent="." instance=ExtResource("3_721cq")]
+transform = Transform3D(0.120286, 0, -0.0612887, 0, 0.135, 0, 0.0612887, 0, 0.120286, -1.61081, 0, 13.2189)
+
+[node name="Computer" parent="." instance=ExtResource("4_b4kbp")]
+transform = Transform3D(-1.09278e-07, 0, -2.5, 0, 2.5, 0, 2.5, 0, -1.09278e-07, -1.33618, 10.8885, -0.130532)
+
+[node name="Light" parent="." instance=ExtResource("5_llre0")]
+transform = Transform3D(-10, 8.74228e-07, 0, -8.74228e-07, -10, 0, 0, 0, 10, -0.418682, 27.794, 1.85447)
