@@ -1,0 +1,25 @@
+[gd_scene load_steps=3 format=3 uid="uid://dieluo60ypjoh"]
+
+[ext_resource type="Shader" path="res://assets/shaders/psx_effect.gdshader" id="1_cii8m"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_0o8nk"]
+shader = ExtResource("1_cii8m")
+shader_parameter/enabled = true
+shader_parameter/dithering = true
+shader_parameter/colors = 12
+shader_parameter/dither_size = 1
+
+[node name="SubViewportContainer" type="SubViewportContainer"]
+material = SubResource("ShaderMaterial_0o8nk")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="SubViewport" type="SubViewport" parent="."]
+handle_input_locally = false
+gui_disable_input = true
+size = Vector2i(1280, 720)
+render_target_update_mode = 4
