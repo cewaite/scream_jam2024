@@ -12,7 +12,7 @@ resource_local_to_scene = true
 shading_mode = 0
 albedo_texture = SubResource("ViewportTexture_pquyo")
 
-[sub_resource type="QuadMesh" id="QuadMesh_vimns"]
+[sub_resource type="QuadMesh" id="QuadMesh_8rqsv"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_n5ppb"]
 size = Vector3(1, 1, 0.0214844)
@@ -46,7 +46,7 @@ script = ExtResource("1_l3lwo")
 
 [node name="Display" type="MeshInstance3D" parent="."]
 material_override = SubResource("StandardMaterial3D_weiro")
-mesh = SubResource("QuadMesh_vimns")
+mesh = SubResource("QuadMesh_8rqsv")
 
 [node name="Area" type="Area3D" parent="."]
 input_capture_on_drag = true

@@ -1,6 +1,27 @@
-[gd_scene load_steps=2 format=3 uid="uid://2fenrba40ao2"]
+[gd_scene load_steps=5 format=3 uid="uid://2fenrba40ao2"]
 
 [ext_resource type="Script" path="res://scenes/game_manager/game_manager.gd" id="1_v5cb4"]
+[ext_resource type="PackedScene" uid="uid://b5qjgpcdrcq8" path="res://scenes/the_room/the_room.tscn" id="2_1oe0i"]
+[ext_resource type="PackedScene" uid="uid://wgnj4rupwwno" path="res://ui/main_menu/main_menu.tscn" id="3_ndug5"]
 
-[node name="GameManager" type="Node3D"]
+[sub_resource type="Environment" id="Environment_vhmtg"]
+background_mode = 1
+ambient_light_color = Color(0.333333, 0.333333, 0.333333, 1)
+ambient_light_energy = 0.01
+
+[node name="GameManager" type="Node3D" node_paths=PackedStringArray("room")]
 script = ExtResource("1_v5cb4")
+room = NodePath("TheRoom")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_vhmtg")
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.887011, 0.461749, 0, -0.461749, 0.887011, 0, 22.9089, 29.399)
+
+[node name="TheRoom" parent="." instance=ExtResource("2_1oe0i")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -8)
+
+[node name="UI" type="CanvasLayer" parent="."]
+
+[node name="MainMenu" parent="UI" instance=ExtResource("3_ndug5")]

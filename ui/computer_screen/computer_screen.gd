@@ -1,4 +1,4 @@
-extends Node3D
+class_name Screen extends Node3D
 
 @onready var display = $Display
 @onready var viewport = $SubViewport

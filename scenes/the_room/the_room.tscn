@@ -2,6 +2,7 @@
 
 [ext_resource type="PackedScene" uid="uid://c6gcj26dp48a" path="res://assets/old_table/scene.gltf" id="1_c4vbn"]
 [ext_resource type="Texture2D" uid="uid://1v5aepmojj7u" path="res://assets/textures/grunge-wall-texture.jpg" id="1_h322l"]
+[ext_resource type="Script" path="res://scenes/the_room/the_room.gd" id="1_nx7io"]
 [ext_resource type="PackedScene" uid="uid://csjh00djqy723" path="res://assets/old_chair/scene.gltf" id="3_721cq"]
 [ext_resource type="Shader" path="res://assets/shaders/jitter.gdshader" id="3_tmplj"]
 [ext_resource type="PackedScene" uid="uid://durgt622whsin" path="res://assets/old_computer/scene.gltf" id="4_l08p0"]
@@ -235,24 +236,21 @@ _surfaces = [{
 blend_shape_mode = 0
 shadow_mesh = SubResource("ArrayMesh_53ysx")
 
-[sub_resource type="Environment" id="Environment_fxwmc"]
-background_mode = 1
-ambient_light_color = Color(0.333333, 0.333333, 0.333333, 1)
-ambient_light_energy = 0.01
-
 [node name="TheRoom" type="Node3D"]
+script = ExtResource("1_nx7io")
 
 [node name="Floor" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.47923, 0, 0)
 mesh = SubResource("PlaneMesh_c71u4")
 
 [node name="Table" parent="." instance=ExtResource("1_c4vbn")]
-transform = Transform3D(0.2, 0, 0, 0, 0.146, 0, 0, 0, 0.2, -1, 0, 2)
+transform = Transform3D(0.2, 0, 0, 0, 0.146, 0, 0, 0, 0.2, 0.479231, 0, 2)
 
 [node name="defaultMaterial" parent="Table/Sketchfab_model/Collada visual scene group/table_low" index="0"]
 mesh = SubResource("ArrayMesh_nrw70")
 
 [node name="Chair" parent="." instance=ExtResource("3_721cq")]
-transform = Transform3D(0.120286, 0, -0.0612887, 0, 0.135, 0, 0.0612887, 0, 0.120286, -1.61081, 0, 13.2189)
+transform = Transform3D(0.120286, 0, -0.0612887, 0, 0.135, 0, 0.0612887, 0, 0.120286, -0.131579, 0, 13.2189)
 
 [node name="Seat_low_Chair_0" parent="Chair/Sketchfab_model/931fad5d9b0142c29e39cd6188e356d5_fbx/RootNode/Seat_low" index="0"]
 mesh = SubResource("ArrayMesh_5a0ou")
@@ -261,7 +259,7 @@ mesh = SubResource("ArrayMesh_5a0ou")
 mesh = SubResource("ArrayMesh_5qek4")
 
 [node name="Light" parent="." instance=ExtResource("5_llre0")]
-transform = Transform3D(-10, 8.74228e-07, 0, -8.74228e-07, -10, 0, 0, 0, 10, -0.418682, 27.794, 4.4985)
+transform = Transform3D(-10, 8.74228e-07, 0, -8.74228e-07, -10, 0, 0, 0, 10, -0.606919, 27.794, 4.4985)
 
 [node name="#LMP0003_Light_Bulb_Low_Poly_#LMP0003_Textures_0" parent="Light/Sketchfab_model/Low_Poly_Light_Bulb_fbx/RootNode/#LMP0003_Light_Bulb_Low_Poly" index="0"]
 transform = Transform3D(1, -6.09864e-22, 1.76639e-28, 6.77626e-21, 1, 0, 8.27995e-28, 0, 1, -0.000890639, 0.00422993, -0.00707221)
@@ -275,24 +273,22 @@ light_size = 6.435
 shadow_enabled = true
 shadow_opacity = 0.9
 shadow_blur = 0.5
-omni_range = 74.733
+distance_fade_begin = 41.0
+omni_range = 50.0
 omni_attenuation = 0.420448
 
 [node name="Computer" parent="." instance=ExtResource("4_l08p0")]
-transform = Transform3D(-6.18079e-07, 0, -14.14, 0, 14.14, 0, 14.14, 0, -6.18079e-07, -2.05822, 10.8921, 2.39191)
+transform = Transform3D(-6.18079e-07, 0, -14.14, 0, 14.14, 0, 14.14, 0, -6.18079e-07, -0.578989, 10.8921, 2.39191)
 
 [node name="computer_Computer_0" parent="Computer/Sketchfab_model/fdf19346c46f45c385f1efab46a72c0f_fbx/RootNode/computer" index="0"]
 transform = Transform3D(1, 0, 0, 0, 1, 3.1129e-22, 8.47033e-22, 3.1129e-22, 1, 0, 0, -0.00737655)
 mesh = SubResource("ArrayMesh_yue3w")
 
 [node name="ComputerScreen" parent="." instance=ExtResource("12_34xau")]
-transform = Transform3D(4, 0, 0, 0, 3.19, 0, 0, 0, 3.22, -2.16231, 13.6552, 1.90306)
+transform = Transform3D(3.86495, -0.0158859, 0, 0.020237, 3.03396, 0, 0, 0, 3.063, -0.652769, 13.655, 1.903)
 
-[node name="Camera3D" type="Camera3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.94922, 13.6267, 4.50615)
-
-[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
-environment = SubResource("Environment_fxwmc")
+[node name="SeatedCameraMarker" type="Marker3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.589769, 13.601, 4.81)
 
 [editable path="Table"]
 [editable path="Chair"]
