@@ -1,8 +1,11 @@
-class_name Screen extends Node3D
+class_name ComputerScreen extends Node3D
+
+const CHAT_RTL = preload("res://ui/screen_gui/chat_rtl.tscn")
 
 @onready var display = $Display
 @onready var viewport = $SubViewport
 @onready var area = $Area
+@onready var screen_gui: ScreenGUI = $SubViewport/ScreenGUI
 
 var mesh_size: Vector2 = Vector2()
 
@@ -19,6 +22,11 @@ func _ready():
 	area.mouse_exited.connect(func(): mouse_entered = false)
 	viewport.set_process_input(true)
 
+func add_message(msg : String):
+	var new_chat = CHAT_RTL.instantiate() as RichTextLabel
+	new_chat.text = msg
+	screen_gui.chat_container.add_child(new_chat)
+	screen_gui.scroll_container.scroll_vertical = screen_gui.scroll_container.get_v_scroll_bar().max_value
 
 func _unhandled_input(event):
 	var is_mouse_event = false

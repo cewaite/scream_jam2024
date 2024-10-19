@@ -287,9 +287,6 @@ mesh = SubResource("ArrayMesh_yue3w")
 [node name="ComputerScreen" parent="." instance=ExtResource("12_34xau")]
 transform = Transform3D(3.86495, -0.0158859, 0, 0.020237, 3.03396, 0, 0, 0, 3.063, -0.652769, 13.655, 1.903)
 
-[node name="SeatedCameraMarker" type="Marker3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.589769, 13.601, 4.81)
-
 [editable path="Table"]
 [editable path="Chair"]
 [editable path="Light"]

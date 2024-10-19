@@ -15,6 +15,10 @@ run/main_scene="res://scenes/game_manager/game_manager.tscn"
 config/features=PackedStringArray("4.2", "Forward Plus")
 config/icon="res://icon.svg"
 
+[autoload]
+
+SignalController="*res://globals/signal_controller.gd"
+
 [display]
 
 window/size/viewport_width=1280

@@ -1,7 +1,6 @@
 class_name TheRoom extends Node3D
 
 @onready var computer_screen = $ComputerScreen
-@onready var seated_camera_marker = $SeatedCameraMarker
 
 
 # Called when the node enters the scene tree for the first time.

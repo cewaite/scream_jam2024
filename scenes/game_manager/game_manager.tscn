@@ -1,27 +1,43 @@
-[gd_scene load_steps=5 format=3 uid="uid://2fenrba40ao2"]
+[gd_scene load_steps=7 format=3 uid="uid://2fenrba40ao2"]
 
 [ext_resource type="Script" path="res://scenes/game_manager/game_manager.gd" id="1_v5cb4"]
 [ext_resource type="PackedScene" uid="uid://b5qjgpcdrcq8" path="res://scenes/the_room/the_room.tscn" id="2_1oe0i"]
 [ext_resource type="PackedScene" uid="uid://wgnj4rupwwno" path="res://ui/main_menu/main_menu.tscn" id="3_ndug5"]
+[ext_resource type="Script" path="res://ui/ui.gd" id="3_t6cev"]
+[ext_resource type="PackedScene" uid="uid://mwriol6rdmeq" path="res://ui/option_menu/option_menu.tscn" id="5_5m0y2"]
 
 [sub_resource type="Environment" id="Environment_vhmtg"]
 background_mode = 1
 ambient_light_color = Color(0.333333, 0.333333, 0.333333, 1)
 ambient_light_energy = 0.01
 
-[node name="GameManager" type="Node3D" node_paths=PackedStringArray("room")]
+[node name="GameManager" type="Node3D" node_paths=PackedStringArray("room", "camera", "seated_camera_marker")]
 script = ExtResource("1_v5cb4")
 room = NodePath("TheRoom")
+camera = NodePath("Camera3D")
+seated_camera_marker = NodePath("SeatedMarker")
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_vhmtg")
 
 [node name="Camera3D" type="Camera3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 0.887011, 0.461749, 0, -0.461749, 0.887011, 0, 22.9089, 29.399)
+transform = Transform3D(1, 0, 0, 0, 0.887011, 0.461749, 0, -0.461749, 0.887011, 0, 24.7029, 25.4498)
 
 [node name="TheRoom" parent="." instance=ExtResource("2_1oe0i")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -8)
 
+[node name="SeatedMarker" type="Marker3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.260681, 13.5659, -2.73128)
+
 [node name="UI" type="CanvasLayer" parent="."]
+script = ExtResource("3_t6cev")
 
 [node name="MainMenu" parent="UI" instance=ExtResource("3_ndug5")]
+
+[node name="OptionMenu" parent="UI" instance=ExtResource("5_5m0y2")]
+visible = false
+
+[connection signal="open_options" from="UI/MainMenu" to="UI" method="_on_main_menu_open_options"]
+[connection signal="start_game" from="UI/MainMenu" to="." method="_on_main_menu_start_game"]
+[connection signal="start_game" from="UI/MainMenu" to="UI" method="_on_main_menu_start_game"]
+[connection signal="back" from="UI/OptionMenu" to="UI" method="_on_option_menu_back"]

@@ -1,6 +1,10 @@
-[gd_scene format=3 uid="uid://boiuapic68xir"]
+[gd_scene load_steps=4 format=3 uid="uid://boiuapic68xir"]
 
-[node name="Control" type="Control"]
+[ext_resource type="Script" path="res://ui/screen_gui/screen_gui.gd" id="1_e1q16"]
+[ext_resource type="Texture2D" uid="uid://bw5kbi8nr30xk" path="res://assets/icons/power-lightning.svg" id="1_ulybx"]
+[ext_resource type="Texture2D" uid="uid://cknxl30pltbub" path="res://assets/icons/thunder-skull.svg" id="2_h648y"]
+
+[node name="ScreenGUI" type="Control"]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -11,6 +15,7 @@ grow_horizontal = 2
 grow_vertical = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
+script = ExtResource("1_e1q16")
 
 [node name="ColorRect" type="ColorRect" parent="."]
 layout_mode = 1
@@ -22,59 +27,25 @@ grow_vertical = 2
 color = Color(0.0235294, 0.0235294, 0.0235294, 1)
 
 [node name="ScrollContainer" type="ScrollContainer" parent="."]
+unique_name_in_owner = true
 layout_mode = 1
 anchors_preset = 13
 anchor_left = 0.5
 anchor_right = 0.5
 anchor_bottom = 1.0
 offset_left = -248.0
-offset_top = 10.0
+offset_top = 53.0
 offset_right = 247.0
 offset_bottom = -95.0
 grow_horizontal = 2
 grow_vertical = 2
 follow_focus = true
 
-[node name="TextVBoxContainer" type="VBoxContainer" parent="ScrollContainer"]
+[node name="ChatVBoxContainer" type="VBoxContainer" parent="ScrollContainer"]
+unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
-
-[node name="RichTextLabel" type="RichTextLabel" parent="ScrollContainer/TextVBoxContainer"]
-layout_mode = 2
-theme_override_font_sizes/normal_font_size = 12
-bbcode_enabled = true
-text = "This is a test text"
-fit_content = true
-scroll_active = false
-autowrap_mode = 0
-
-[node name="RichTextLabel2" type="RichTextLabel" parent="ScrollContainer/TextVBoxContainer"]
-layout_mode = 2
-theme_override_font_sizes/normal_font_size = 12
-bbcode_enabled = true
-text = "This is a test text"
-fit_content = true
-scroll_active = false
-autowrap_mode = 0
-
-[node name="RichTextLabel3" type="RichTextLabel" parent="ScrollContainer/TextVBoxContainer"]
-layout_mode = 2
-theme_override_font_sizes/normal_font_size = 12
-bbcode_enabled = true
-text = "This is a test text"
-fit_content = true
-scroll_active = false
-autowrap_mode = 0
-
-[node name="RichTextLabel4" type="RichTextLabel" parent="ScrollContainer/TextVBoxContainer"]
-layout_mode = 2
-theme_override_font_sizes/normal_font_size = 12
-bbcode_enabled = true
-text = "This is a test text"
-fit_content = true
-scroll_active = false
-autowrap_mode = 0
 
 [node name="InputVBoxContainer" type="VBoxContainer" parent="."]
 layout_mode = 1
@@ -90,10 +61,11 @@ grow_horizontal = 2
 grow_vertical = 0
 
 [node name="LineEdit" type="LineEdit" parent="InputVBoxContainer"]
+unique_name_in_owner = true
 layout_mode = 2
 size_flags_vertical = 4
 theme_override_font_sizes/font_size = 24
-max_length = 30
+max_length = 8
 context_menu_enabled = false
 caret_blink = true
 caret_force_displayed = true
@@ -104,12 +76,91 @@ layout_mode = 2
 alignment = 1
 
 [node name="PauseButton" type="Button" parent="InputVBoxContainer/HBoxContainer"]
+unique_name_in_owner = true
 layout_mode = 2
 theme_override_font_sizes/font_size = 16
 text = "Pause Experiment"
 
-[node name="Button" type="Button" parent="InputVBoxContainer/HBoxContainer"]
+[node name="EnterButton" type="Button" parent="InputVBoxContainer/HBoxContainer"]
+unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_font_sizes/font_size = 16
 text = "Enter"
+
+[node name="TopHBoxContainer" type="HBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_left = 8.0
+offset_top = 7.0
+offset_right = -9.0
+offset_bottom = 42.0
+grow_horizontal = 2
+
+[node name="PlayerStrikesHBoxContainer" type="HBoxContainer" parent="TopHBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="TextureRect" type="TextureRect" parent="TopHBoxContainer/PlayerStrikesHBoxContainer"]
+visible = false
+layout_mode = 2
+texture = ExtResource("1_ulybx")
+expand_mode = 2
+
+[node name="TextureRect2" type="TextureRect" parent="TopHBoxContainer/PlayerStrikesHBoxContainer"]
+visible = false
+layout_mode = 2
+texture = ExtResource("1_ulybx")
+expand_mode = 2
+
+[node name="TextureRect3" type="TextureRect" parent="TopHBoxContainer/PlayerStrikesHBoxContainer"]
+visible = false
+layout_mode = 2
+texture = ExtResource("1_ulybx")
+expand_mode = 2
+
+[node name="TextureRect4" type="TextureRect" parent="TopHBoxContainer/PlayerStrikesHBoxContainer"]
+visible = false
+layout_mode = 2
+texture = ExtResource("2_h648y")
+expand_mode = 2
+
+[node name="TimerLabel" type="Label" parent="TopHBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 32
+text = "00.00"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="SubjectStrikesHBoxContainer" type="HBoxContainer" parent="TopHBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="TextureRect4" type="TextureRect" parent="TopHBoxContainer/SubjectStrikesHBoxContainer"]
+visible = false
+layout_mode = 2
+texture = ExtResource("2_h648y")
+expand_mode = 2
+
+[node name="TextureRect" type="TextureRect" parent="TopHBoxContainer/SubjectStrikesHBoxContainer"]
+visible = false
+layout_mode = 2
+texture = ExtResource("1_ulybx")
+expand_mode = 2
+
+[node name="TextureRect2" type="TextureRect" parent="TopHBoxContainer/SubjectStrikesHBoxContainer"]
+visible = false
+layout_mode = 2
+texture = ExtResource("1_ulybx")
+expand_mode = 2
+
+[node name="TextureRect3" type="TextureRect" parent="TopHBoxContainer/SubjectStrikesHBoxContainer"]
+visible = false
+layout_mode = 2
+texture = ExtResource("1_ulybx")
+expand_mode = 2
+
+[connection signal="pressed" from="InputVBoxContainer/HBoxContainer/PauseButton" to="." method="_on_pause_button_pressed"]
+[connection signal="pressed" from="InputVBoxContainer/HBoxContainer/EnterButton" to="." method="_on_enter_button_pressed"]
