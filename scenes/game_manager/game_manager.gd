@@ -2,6 +2,8 @@ class_name GameManager extends Node3D
 
 enum GAME_STATE { MAIN_MENU, MENU_TO_PLAY, PLAYING, PAUSED }
 
+const SUBJECT = preload("res://entities/subject/subject.tscn")
+
 @export var room: TheRoom
 @export var idle_rot_speed: float = 0.3
 @export var return_rot_speed: float = 2.0
@@ -10,41 +12,43 @@ enum GAME_STATE { MAIN_MENU, MENU_TO_PLAY, PLAYING, PAUSED }
 @export var seated_camera_marker: Marker3D
 @export var camera_speed: float = 1.0
 
+@export var question_timer: Timer
+
 var curr_game_state: GAME_STATE = GAME_STATE.MAIN_MENU
 var screen: ComputerScreen
 var player_name: String
+
+var players_strikes: int = 0
+var subjects_strikes: int = 0
+var curr_question: Question
+
+var subject: Subject
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	screen = room.computer_screen
 	SignalController.connect("submit_answer", _on_screen_gui_submit_answer)
 	SignalController.connect("pause", _on_screen_gui_pause)
+	
+	subject = SUBJECT.instantiate()
+	add_child(subject)
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
 	match curr_game_state:
+		
 		GAME_STATE.MAIN_MENU:
 			room.rotation = lerp(room.rotation, room.rotation + Vector3.UP, delta * idle_rot_speed)
 			if rad_to_deg(room.rotation.y) >= 360.0:
 				room.rotation.y = 0.0
+		
 		GAME_STATE.MENU_TO_PLAY:
 			room.rotation = lerp(room.rotation, Vector3.ZERO, delta * return_rot_speed)
 			camera.position = lerp(camera.position, seated_camera_marker.position, delta * camera_speed)
 			camera.rotation = lerp(camera.rotation, seated_camera_marker.rotation, delta *  camera_speed)
 			if vector_is_equal_approx(room.rotation, Vector3.ZERO) and vector_is_equal_approx(camera.position, seated_camera_marker.position) and vector_is_equal_approx(camera.rotation, seated_camera_marker.rotation):
 				curr_game_state = GAME_STATE.PLAYING
-				play_game()
-
-func play_game():
-	# Send intro message from Proctor explaining rules
-	send_intro()
-	# Loop until Player or Subject has 3 strikes:
-	#	Proctor asks question
-	#	10 sec timer to answer or Player shocked
-	#	Subject answers
-	#	If Subject answer != Players, shock Subject
-	#	Repeat 
-	pass
+				send_intro()
 
 func send_intro():
 	var intro_msgs = [
@@ -62,6 +66,12 @@ func send_intro():
 		await get_tree().create_timer(5.0).timeout
 	screen.screen_gui.toggle_enter_button()
 
+func end_game_player_lost():
+	pass
+
+func end_game_subject_lost():
+	pass
+
 func _on_main_menu_start_game():
 	curr_game_state = GAME_STATE.MENU_TO_PLAY
 
@@ -71,19 +81,41 @@ func vector_is_equal_approx(v1 : Vector3, v2 : Vector3):
 func _on_screen_gui_submit_answer(answer : String):
 	# if player_name is null, handle answer as if thats what they're answering,
 	# handle question answer otherwise.
+	screen.screen_gui.toggle_enter_button()
 	if not player_name:
 		if not answer or answer.is_empty():
 			screen.add_message("[b]Proctor:[/b] NULL values will not be tolerated. Submit a name.")
 		elif answer == "God":
 			screen.add_message("[b]Proctor:[/b] God is irrelevant here. Submit a name.")
 		else:
-			screen.screen_gui.toggle_enter_button()
 			await get_tree().create_timer(2.0).timeout
 			player_name = answer
 			screen.add_message("[b]Proctor:[/b] Very good, " + player_name + ". Begin.")
-			await get_tree().create_timer(3.0).timeout
+			await get_tree().create_timer(2.0).timeout
 	else:
-		screen.add_message("[b]" + player_name + ":[/b]")
+		question_timer.stop()
+		screen.add_message("[b]" + player_name + ":[/b] " + answer)
+		await get_tree().create_timer(2.0).timeout
+		var subjects_answer = subject.answer_question(curr_question, subjects_strikes)
+		screen.add_message("[b]Subject:[/b] " + subjects_answer)
+		if subjects_answer == answer:
+			screen.add_message("[b]Proctor:[/b] Subjects answer concurs with the truth.")
+		else:
+			screen.add_message("[b]Proctor:[/b] Subjects answer differed from the truth. Administering [i]corrective action[/i].")
+		await get_tree().create_timer(2.0).timeout
+		screen.add_message("[b]Proctor:[/b] Next question...")
+	screen.screen_gui.toggle_enter_button()
+	ask_question()
+
+func ask_question():
+	#Proctor asks question
+	curr_question = MathQuestion.new()
+	curr_question.difficulty = Question.DIFFICULTY.EASY
+	curr_question.generate_question()
+	screen.add_message("-----------------------------------------------------------")
+	screen.add_message("[b]Proctor:[/b] What is " + curr_question.question_to_string() + "?")
+	#15 sec timer to answer or Player shocked
+	question_timer.start()
 
 func _on_screen_gui_pause():
 	pass # Replace with function body.

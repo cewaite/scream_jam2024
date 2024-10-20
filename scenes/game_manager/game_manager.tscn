@@ -11,11 +11,12 @@ background_mode = 1
 ambient_light_color = Color(0.333333, 0.333333, 0.333333, 1)
 ambient_light_energy = 0.01
 
-[node name="GameManager" type="Node3D" node_paths=PackedStringArray("room", "camera", "seated_camera_marker")]
+[node name="GameManager" type="Node3D" node_paths=PackedStringArray("room", "camera", "seated_camera_marker", "question_timer")]
 script = ExtResource("1_v5cb4")
 room = NodePath("TheRoom")
 camera = NodePath("Camera3D")
 seated_camera_marker = NodePath("SeatedMarker")
+question_timer = NodePath("Timer")
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_vhmtg")
@@ -28,6 +29,9 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -8)
 
 [node name="SeatedMarker" type="Marker3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.260681, 13.5659, -2.73128)
+
+[node name="Timer" type="Timer" parent="."]
+wait_time = 15.0
 
 [node name="UI" type="CanvasLayer" parent="."]
 script = ExtResource("3_t6cev")

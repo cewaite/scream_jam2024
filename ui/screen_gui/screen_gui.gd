@@ -16,7 +16,7 @@ func toggle_enter_button():
 	enter_button.disabled = !enter_button.disabled
 
 func _on_enter_button_pressed():
-	SignalController.submit_answer.emit(line_edit.text.capitalize())
+	SignalController.submit_answer.emit(line_edit.text.dedent().capitalize())
 	line_edit.clear()
 
 func _on_pause_button_pressed():
