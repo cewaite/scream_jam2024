@@ -10,10 +10,11 @@ const SUBJECT = preload("res://entities/subject/subject.tscn")
 
 @export var camera: Camera3D
 @export var seated_camera_marker: Marker3D
+@export var hover_camera_marker: Marker3D
 @export var camera_speed: float = 1.0
 
 @export var question_timer: Timer
-@export var question_until_win: int = 20
+@export var question_until_win: int = 1
 
 @export var ui: UI
 @export var transition_screen: TransitionScreen
@@ -121,8 +122,6 @@ func _on_screen_gui_submit_answer(answer : String):
 			else:
 				# Stop Timer
 				question_timer.stop()
-				# reset bad_answers
-				bad_answers = 0
 				# increment total questions answered
 				total_questions += 1
 				# check if wrong for ending
@@ -150,7 +149,7 @@ func check_ending_or_cont():
 		end_game_player_lost()
 	elif subjects_strikes == 4:
 		end_game_subject_lost()
-	elif total_questions <= question_until_win:
+	elif total_questions == question_until_win:
 		await get_tree().create_timer(2.0).timeout
 		screen.add_message("[b]Proctor:[/b] Next question...")
 		ask_question()
@@ -163,29 +162,41 @@ func ask_question():
 	curr_question.difficulty = Question.DIFFICULTY.EASY
 	curr_question.generate_question()
 	screen.add_message("-----------------------------------------------------------")
-	screen.add_message("[b]Proctor:[/b] What is " + curr_question.question_to_string() + "?" + curr_question.question_to_string() + "?")
+	screen.add_message("[b]Proctor:[/b] What is " + curr_question.question_to_string() + "?")
 	#15 sec timer to answer or Player shocked
 	question_timer.start()
 
 func end_game_player_lost():
+	screen.screen_gui.toggle_enter_button()
 	# Wait a few seconds until "shock" audio finishes, play bulb burst sfx
 	await get_tree().create_timer(8.0).timeout
 	transition_screen.transition_to_black()
-	await not transition_screen.animation_player.is_playing()
+	await get_tree().create_timer(2.0).timeout
 	# Play chat sfx then show lose screen
-	ui.show_lose_screen("[b]Proctor:[/b] Disappointing, " + player_name + ". Very Disappointing.")
+	ui.show_lose_screen("[center][b]Proctor:[/b] Disappointing, Tester. Very Disappointing.[/center]")
+	transition_screen.transition_to_normal()
 
 func end_game_subject_lost():
+	screen.screen_gui.toggle_enter_button()
 	# Wait a few seconds until "shock" audio finishes, play bulb burst sfx
 	await get_tree().create_timer(8.0).timeout
 	transition_screen.transition_to_black()
-	await not transition_screen.animation_player.is_playing()
+	# Wait for animation to finish
+	await get_tree().create_timer(2.0).timeout
 	# Play chat sfx then show lose screen
-	ui.show_lose_screen("[b]Proctor:[/b] Well done, " + player_name + ".\nYou've abandoned your morals...")
+	ui.show_lose_screen("[center][b]Proctor:[/b] Well done, " + player_name + ". You've abandoned your morals...[/center]")
+	transition_screen.transition_to_normal()
 	
 
 func win_game():
-	pass
+	screen.screen_gui.toggle_enter_button()
+	await get_tree().create_timer(5.0).timeout
+	screen.add_message("[b]Proctor:[/b] All questions answered. Experiment complete...")
+	await get_tree().create_timer(5.0).timeout	
+	# Play chat sfx then show lose screen
+	ui.show_win_screen("[center][b]Subject:[/b] Thank you, " + player_name + ". Thank you...[/center]")
+	await get_tree().create_timer(2.0).timeout
+	#play sfx
 
 func strike_subject():
 	subjects_strikes += 1
@@ -206,22 +217,26 @@ func _on_question_timer_timeout():
 	screen.add_message("[b]Proctor:[/b] " + player_name + " failed to answer. Administering [i]corrective action[/i].")
 	await get_tree().create_timer(2.0).timeout
 	strike_player()
-	ask_question()
+	check_ending_or_cont()
 	screen.screen_gui.toggle_enter_button()
+	
 
 
 func _on_ui_restart():
 	curr_game_state = GAME_STATE.MAIN_MENU
 	player_name = ""
-
+	
 	players_strikes = 0
 	subjects_strikes = 0
 	bad_answers = 0
 	curr_question = null
-
+	
 	total_questions = 0
 	unanswered_questions = 0
 	wrong_answers = 0
 	
-	# Clear screen strike markers
+	# Clear screen strike markers and timer
+	screen.screen_gui.clear_screen()
 	# Move Camera to starting position
+	camera.global_position = hover_camera_marker.global_position
+	camera.global_rotation = hover_camera_marker.global_rotation

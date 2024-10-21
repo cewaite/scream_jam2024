@@ -26,6 +26,16 @@ func show_player_strikes(num_strikes: int):
 	if num_strikes <= player_strike_icons.size():
 		player_strike_icons[num_strikes - 1].visible = true
 
+func clear_screen():
+	timer_label.text = "0.00"
+	line_edit.clear()
+	for icon in subject_strike_icons:
+		icon.visible = false
+	for icon in player_strike_icons:
+		icon.visible = false
+	for msg in chat_container.get_children():
+		msg.queue_free()
+
 func _on_enter_button_pressed():
 	SignalController.submit_answer.emit(line_edit.text.dedent().capitalize())
 	line_edit.clear()

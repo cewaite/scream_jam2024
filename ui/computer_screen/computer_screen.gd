@@ -28,6 +28,8 @@ func add_message(msg : String):
 	screen_gui.chat_container.add_child(new_chat)
 	screen_gui.scroll_container.scroll_vertical = screen_gui.scroll_container.get_v_scroll_bar().max_value
 
+
+
 func _unhandled_input(event):
 	var is_mouse_event = false
 	if event is InputEventMouseMotion or event is InputEventMouseButton:

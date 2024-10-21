@@ -12,6 +12,12 @@ func show_lose_screen(msg : String):
 	lose_screen.message_label.text = msg
 	lose_screen.visible = true
 
+func show_win_screen(msg : String):
+	#lose_screen.mouse_filter = Control.MOUSE_FILTER_STOP
+	win_screen.message_label.text = msg
+	win_screen.visible = true
+	win_screen.play_animation()
+
 func _on_main_menu_start_game():
 	main_menu.visible = false
 	#main_menu.set_process_input(false)
@@ -32,5 +38,11 @@ func _on_option_menu_back():
 
 func _on_lose_screen_retry():
 	lose_screen.visible = false
+	main_menu.visible = true
+	restart.emit()
+
+
+func _on_win_screen_play_again():
+	win_screen.visible = false
 	main_menu.visible = true
 	restart.emit()

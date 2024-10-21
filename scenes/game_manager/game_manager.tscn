@@ -14,11 +14,12 @@ background_mode = 1
 ambient_light_color = Color(0.333333, 0.333333, 0.333333, 1)
 ambient_light_energy = 0.01
 
-[node name="GameManager" type="Node3D" node_paths=PackedStringArray("room", "camera", "seated_camera_marker", "question_timer", "ui", "transition_screen")]
+[node name="GameManager" type="Node3D" node_paths=PackedStringArray("room", "camera", "seated_camera_marker", "hover_camera_marker", "question_timer", "ui", "transition_screen")]
 script = ExtResource("1_v5cb4")
 room = NodePath("TheRoom")
 camera = NodePath("Camera3D")
 seated_camera_marker = NodePath("SeatedMarker")
+hover_camera_marker = NodePath("HoverMarker")
 question_timer = NodePath("QuestionTimer")
 ui = NodePath("UI")
 transition_screen = NodePath("TransitionScreen")
@@ -34,6 +35,9 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -8)
 
 [node name="SeatedMarker" type="Marker3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.260681, 13.5659, -2.73128)
+
+[node name="HoverMarker" type="Marker3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.887011, 0.461749, 0, -0.461749, 0.887011, 0, 24.7029, 25.4498)
 
 [node name="QuestionTimer" type="Timer" parent="."]
 wait_time = 10.0
@@ -54,8 +58,6 @@ visible = false
 
 [node name="TransitionScreen" parent="." instance=ExtResource("6_nt10t")]
 
-[node name="Marker3D" type="Marker3D" parent="."]
-
 [connection signal="timeout" from="QuestionTimer" to="." method="_on_question_timer_timeout"]
 [connection signal="restart" from="UI" to="." method="_on_ui_restart"]
 [connection signal="open_options" from="UI/MainMenu" to="UI" method="_on_main_menu_open_options"]
@@ -63,3 +65,4 @@ visible = false
 [connection signal="start_game" from="UI/MainMenu" to="UI" method="_on_main_menu_start_game"]
 [connection signal="back" from="UI/OptionMenu" to="UI" method="_on_option_menu_back"]
 [connection signal="retry" from="UI/LoseScreen" to="UI" method="_on_lose_screen_retry"]
+[connection signal="play_again" from="UI/WinScreen" to="UI" method="_on_win_screen_play_again"]

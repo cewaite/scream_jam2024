@@ -1,8 +1,10 @@
-[gd_scene load_steps=4 format=3 uid="uid://boiuapic68xir"]
+[gd_scene load_steps=6 format=3 uid="uid://boiuapic68xir"]
 
 [ext_resource type="Script" path="res://ui/screen_gui/screen_gui.gd" id="1_e1q16"]
 [ext_resource type="Texture2D" uid="uid://bw5kbi8nr30xk" path="res://assets/icons/power-lightning.svg" id="1_ulybx"]
 [ext_resource type="Texture2D" uid="uid://cknxl30pltbub" path="res://assets/icons/thunder-skull.svg" id="2_h648y"]
+[ext_resource type="Texture2D" uid="uid://b4a6rvf3px1lc" path="res://assets/icons/electric.svg" id="2_stuvd"]
+[ext_resource type="Texture2D" uid="uid://d36y4k2vsglcx" path="res://assets/icons/heavy-lightning.svg" id="4_ng3o6"]
 
 [node name="ScreenGUI" type="Control" node_paths=PackedStringArray("subject_strike_icons", "player_strike_icons")]
 layout_mode = 3
@@ -107,7 +109,7 @@ size_flags_horizontal = 3
 [node name="TextureRect" type="TextureRect" parent="TopHBoxContainer/PlayerStrikesHBoxContainer"]
 visible = false
 layout_mode = 2
-texture = ExtResource("1_ulybx")
+texture = ExtResource("2_stuvd")
 expand_mode = 2
 
 [node name="TextureRect2" type="TextureRect" parent="TopHBoxContainer/PlayerStrikesHBoxContainer"]
@@ -119,7 +121,7 @@ expand_mode = 2
 [node name="TextureRect3" type="TextureRect" parent="TopHBoxContainer/PlayerStrikesHBoxContainer"]
 visible = false
 layout_mode = 2
-texture = ExtResource("1_ulybx")
+texture = ExtResource("4_ng3o6")
 expand_mode = 2
 
 [node name="TextureRect4" type="TextureRect" parent="TopHBoxContainer/PlayerStrikesHBoxContainer"]
@@ -151,7 +153,7 @@ expand_mode = 2
 [node name="TextureRect" type="TextureRect" parent="TopHBoxContainer/SubjectStrikesHBoxContainer"]
 visible = false
 layout_mode = 2
-texture = ExtResource("1_ulybx")
+texture = ExtResource("4_ng3o6")
 expand_mode = 2
 
 [node name="TextureRect2" type="TextureRect" parent="TopHBoxContainer/SubjectStrikesHBoxContainer"]
@@ -163,7 +165,7 @@ expand_mode = 2
 [node name="TextureRect3" type="TextureRect" parent="TopHBoxContainer/SubjectStrikesHBoxContainer"]
 visible = false
 layout_mode = 2
-texture = ExtResource("1_ulybx")
+texture = ExtResource("2_stuvd")
 expand_mode = 2
 
 [connection signal="pressed" from="InputVBoxContainer/HBoxContainer/PauseButton" to="." method="_on_pause_button_pressed"]

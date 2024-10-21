@@ -31,7 +31,7 @@ func calc_answer():
 			answer = num1 * num2
 
 func check_answer(answer):
-	return self.answer == answer
+	return self.answer == int(answer)
 
 func question_to_string() -> String:
 	return str(num1) + " " + operator + " " + str(num2)
