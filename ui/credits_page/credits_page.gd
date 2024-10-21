@@ -1,4 +1,4 @@
-class_name OptionsMenu 
+class_name CreditsPage
 extends Control
 
 signal back()

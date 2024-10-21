@@ -1,8 +1,8 @@
 [gd_scene load_steps=2 format=3 uid="uid://mwriol6rdmeq"]
 
-[ext_resource type="Script" path="res://ui/option_menu/option_menu.gd" id="1_4g0nq"]
+[ext_resource type="Script" path="res://ui/credits_page/credits_page.gd" id="1_4g0nq"]
 
-[node name="OptionMenu" type="Control"]
+[node name="CreditsPage" type="Control"]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0

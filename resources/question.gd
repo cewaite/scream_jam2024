@@ -4,5 +4,5 @@ enum DIFFICULTY {EASY, MEDIUM, HARD}
 
 var difficulty: DIFFICULTY
 
-func check_answer(answer):
+func check_answer(_answer):
 	assert(false, "no answer to compare to in base Question Resource, so must be overwritten.")

@@ -1,22 +1,27 @@
-[gd_scene load_steps=7 format=3 uid="uid://2fenrba40ao2"]
+[gd_scene load_steps=10 format=3 uid="uid://2fenrba40ao2"]
 
 [ext_resource type="Script" path="res://scenes/game_manager/game_manager.gd" id="1_v5cb4"]
 [ext_resource type="PackedScene" uid="uid://b5qjgpcdrcq8" path="res://scenes/the_room/the_room.tscn" id="2_1oe0i"]
 [ext_resource type="PackedScene" uid="uid://wgnj4rupwwno" path="res://ui/main_menu/main_menu.tscn" id="3_ndug5"]
 [ext_resource type="Script" path="res://ui/ui.gd" id="3_t6cev"]
-[ext_resource type="PackedScene" uid="uid://mwriol6rdmeq" path="res://ui/option_menu/option_menu.tscn" id="5_5m0y2"]
+[ext_resource type="PackedScene" uid="uid://mwriol6rdmeq" path="res://ui/credits_page/credits_page.tscn" id="5_5m0y2"]
+[ext_resource type="PackedScene" uid="uid://c7oicnc7370fn" path="res://ui/lose_screen/lose_screen.tscn" id="6_f66pt"]
+[ext_resource type="PackedScene" uid="uid://ed8suuq6xcqr" path="res://scenes/transition_screen/transition_screen.tscn" id="6_nt10t"]
+[ext_resource type="PackedScene" uid="uid://bkyifb2d8spg2" path="res://ui/win_screen/win_screen.tscn" id="7_dbsxc"]
 
 [sub_resource type="Environment" id="Environment_vhmtg"]
 background_mode = 1
 ambient_light_color = Color(0.333333, 0.333333, 0.333333, 1)
 ambient_light_energy = 0.01
 
-[node name="GameManager" type="Node3D" node_paths=PackedStringArray("room", "camera", "seated_camera_marker", "question_timer")]
+[node name="GameManager" type="Node3D" node_paths=PackedStringArray("room", "camera", "seated_camera_marker", "question_timer", "ui", "transition_screen")]
 script = ExtResource("1_v5cb4")
 room = NodePath("TheRoom")
 camera = NodePath("Camera3D")
 seated_camera_marker = NodePath("SeatedMarker")
-question_timer = NodePath("Timer")
+question_timer = NodePath("QuestionTimer")
+ui = NodePath("UI")
+transition_screen = NodePath("TransitionScreen")
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_vhmtg")
@@ -30,8 +35,8 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -8)
 [node name="SeatedMarker" type="Marker3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.260681, 13.5659, -2.73128)
 
-[node name="Timer" type="Timer" parent="."]
-wait_time = 15.0
+[node name="QuestionTimer" type="Timer" parent="."]
+wait_time = 10.0
 
 [node name="UI" type="CanvasLayer" parent="."]
 script = ExtResource("3_t6cev")
@@ -41,7 +46,20 @@ script = ExtResource("3_t6cev")
 [node name="OptionMenu" parent="UI" instance=ExtResource("5_5m0y2")]
 visible = false
 
+[node name="LoseScreen" parent="UI" instance=ExtResource("6_f66pt")]
+visible = false
+
+[node name="WinScreen" parent="UI" instance=ExtResource("7_dbsxc")]
+visible = false
+
+[node name="TransitionScreen" parent="." instance=ExtResource("6_nt10t")]
+
+[node name="Marker3D" type="Marker3D" parent="."]
+
+[connection signal="timeout" from="QuestionTimer" to="." method="_on_question_timer_timeout"]
+[connection signal="restart" from="UI" to="." method="_on_ui_restart"]
 [connection signal="open_options" from="UI/MainMenu" to="UI" method="_on_main_menu_open_options"]
 [connection signal="start_game" from="UI/MainMenu" to="." method="_on_main_menu_start_game"]
 [connection signal="start_game" from="UI/MainMenu" to="UI" method="_on_main_menu_start_game"]
 [connection signal="back" from="UI/OptionMenu" to="UI" method="_on_option_menu_back"]
+[connection signal="retry" from="UI/LoseScreen" to="UI" method="_on_lose_screen_retry"]
