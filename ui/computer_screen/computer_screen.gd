@@ -26,7 +26,12 @@ func add_message(msg : String):
 	var new_chat = CHAT_RTL.instantiate() as RichTextLabel
 	new_chat.text = msg
 	screen_gui.chat_container.add_child(new_chat)
-	screen_gui.scroll_container.scroll_vertical = screen_gui.scroll_container.get_v_scroll_bar().max_value
+	#screen_gui.scroll_container.scroll_vertical = screen_gui.scroll_container.get_v_scroll_bar().max_value
+	#screen_gui.scroll_container.set_deferred("scroll_vertical", screen_gui.scroll_container.get_v_scroll_bar().max_value)
+	#print_debug(screen_gui.scroll_container.scroll_vertical, ", ", screen_gui.scroll_container.get_v_scroll_bar().max_value)
+	await get_tree().process_frame
+	screen_gui.scroll_container.ensure_control_visible(new_chat)
+
 
 
 

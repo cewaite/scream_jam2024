@@ -43,7 +43,7 @@ offset_right = 247.0
 offset_bottom = -95.0
 grow_horizontal = 2
 grow_vertical = 2
-follow_focus = true
+vertical_scroll_mode = 2
 
 [node name="ChatVBoxContainer" type="VBoxContainer" parent="ScrollContainer"]
 unique_name_in_owner = true
@@ -168,5 +168,6 @@ layout_mode = 2
 texture = ExtResource("2_stuvd")
 expand_mode = 2
 
+[connection signal="text_submitted" from="InputVBoxContainer/LineEdit" to="." method="_on_line_edit_text_submitted"]
 [connection signal="pressed" from="InputVBoxContainer/HBoxContainer/PauseButton" to="." method="_on_pause_button_pressed"]
 [connection signal="pressed" from="InputVBoxContainer/HBoxContainer/EnterButton" to="." method="_on_enter_button_pressed"]

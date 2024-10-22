@@ -1,7 +1,7 @@
 class_name ScreenGUI extends Control
 
 
-@onready var scroll_container = %ScrollContainer
+@onready var scroll_container: ScrollContainer = %ScrollContainer
 @onready var chat_container = %ChatVBoxContainer
 @onready var line_edit = %LineEdit
 @onready var pause_button = %PauseButton
@@ -42,3 +42,9 @@ func _on_enter_button_pressed():
 
 func _on_pause_button_pressed():
 	SignalController.pause.emit()
+
+
+func _on_line_edit_text_submitted(new_text):
+	if not enter_button.disabled:
+		SignalController.submit_answer.emit(line_edit.text.dedent().capitalize())
+		line_edit.clear()
