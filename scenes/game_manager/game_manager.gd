@@ -14,7 +14,9 @@ const SUBJECT = preload("res://entities/subject/subject.tscn")
 @export var camera_speed: float = 1.0
 
 @export var question_timer: Timer
-@export var question_until_win: int = 1
+# Higher = more mc, lower = more math
+@export var mc_to_math_ratio: float = 0.5
+@export var question_until_win: int = 20
 
 @export var ui: UI
 @export var transition_screen: TransitionScreen
@@ -105,51 +107,58 @@ func _on_screen_gui_submit_answer(answer : String):
 	else:
 		if not answer or answer.is_empty():
 			screen.add_message("[b]Proctor:[/b] NULL values will not be tolerated. Submit an answer.")
-			bad_answers += 1
+			handle_bad_answer()
 		elif curr_question is MathQuestion and not answer.is_valid_int():
 			screen.add_message("[b]Proctor:[/b] Mathmatic's require numerical answer, formatted logically. Try again.")
-			bad_answers += 1
+			handle_bad_answer()
+		elif curr_question is MCQuestion and answer != "A" and answer != "B" and answer != "C" and answer != "D" and answer != curr_question.a and answer != curr_question.b and answer != curr_question.c and answer != curr_question.d:
+			screen.add_message("[b]Proctor:[/b] An answer of A, B, C, or D is required. Try Again.")
+			handle_bad_answer()
 		else:
-			if bad_answers >= 3:
-				question_timer.stop()
-				bad_answers = 0
-				await get_tree().create_timer(5.0).timeout
-				screen.add_message("[b]Proctor:[/b] Too many bad answers. Disappointing. Administering [i]corrective action[/i].")
-				strike_player()
-				await get_tree().create_timer(2.0).timeout
-				screen.add_message("[b]Proctor:[/b] Next question...")
-				ask_question()
+			# Stop Timer
+			question_timer.stop()
+			# increment total questions answered
+			total_questions += 1
+			# check if wrong for ending
+			if not curr_question.check_answer(answer):
+				wrong_answers += 1
+			# Show players answer
+			screen.add_message("[b]" + player_name + ":[/b] " + answer)
+			# Wait then show Subjects answer
+			await get_tree().create_timer(2.0).timeout
+			var subjects_answer = subject.answer_question(curr_question, subjects_strikes)
+			screen.add_message("[b]Subject:[/b] " + subjects_answer)
+			await get_tree().create_timer(2.0).timeout
+			# Respond accrodingly then move on
+			if subjects_answer == answer or (curr_question is MCQuestion and answer == curr_question.get_choice_from_letter(subjects_answer)):
+				screen.add_message("[b]Proctor:[/b] Subjects answer concurs with the truth.")
 			else:
-				# Stop Timer
-				question_timer.stop()
-				# increment total questions answered
-				total_questions += 1
-				# check if wrong for ending
-				if not curr_question.check_answer(answer):
-					wrong_answers += 1
-				# Show players answer
-				screen.add_message("[b]" + player_name + ":[/b] " + answer)
-				# Wait then show Subjects answer
+				screen.add_message("[b]Proctor:[/b] Subjects answer differed from the truth. Administering [i]corrective action[/i].")
 				await get_tree().create_timer(2.0).timeout
-				var subjects_answer = subject.answer_question(curr_question, subjects_strikes)
-				screen.add_message("[b]Subject:[/b] " + subjects_answer)
-				await get_tree().create_timer(2.0).timeout
-				# Respond accrodingly then move on
-				if subjects_answer == answer:
-					screen.add_message("[b]Proctor:[/b] Subjects answer concurs with the truth.")
-				else:
-					screen.add_message("[b]Proctor:[/b] Subjects answer differed from the truth. Administering [i]corrective action[/i].")
-					await get_tree().create_timer(2.0).timeout
-					strike_subject()
-				check_ending_or_cont()
+				strike_subject()
+			check_ending_or_cont()
 	screen.screen_gui.toggle_enter_button()
+
+func handle_bad_answer():
+	bad_answers += 1
+	if bad_answers >= 3:
+		screen.screen_gui.toggle_enter_button()
+		question_timer.stop()
+		bad_answers = 0
+		await get_tree().create_timer(5.0).timeout
+		screen.add_message("[b]Proctor:[/b] Too many bad answers. Disappointing. Administering [i]corrective action[/i].")
+		strike_player()
+		await get_tree().create_timer(2.0).timeout
+		screen.add_message("[b]Proctor:[/b] Next question...")
+		ask_question()
+		screen.screen_gui.toggle_enter_button()
 
 func check_ending_or_cont():
 	if players_strikes == 4:
 		end_game_player_lost()
 	elif subjects_strikes == 4:
 		end_game_subject_lost()
-	elif total_questions == question_until_win:
+	elif total_questions < question_until_win:
 		await get_tree().create_timer(2.0).timeout
 		screen.add_message("[b]Proctor:[/b] Next question...")
 		ask_question()
@@ -158,11 +167,16 @@ func check_ending_or_cont():
 
 func ask_question():
 	#Proctor asks question
-	curr_question = MathQuestion.new()
-	curr_question.difficulty = Question.DIFFICULTY.EASY
-	curr_question.generate_question()
-	screen.add_message("-----------------------------------------------------------")
-	screen.add_message("[b]Proctor:[/b] What is " + curr_question.question_to_string() + "?")
+	if randf() >= mc_to_math_ratio or QuestionData.mc_questions.is_empty():
+		curr_question = MathQuestion.new()
+		curr_question.difficulty = Question.DIFFICULTY.EASY
+		curr_question.generate_question()
+		screen.add_message("-----------------------------------------------------------")
+		screen.add_message("[b]Proctor:[/b] What is " + curr_question.question_to_string() + "?")
+	else:
+		curr_question = QuestionData.mc_questions.pop_front()
+		screen.add_message("-----------------------------------------------------------")
+		screen.add_message("[b]Proctor:[/b] " + curr_question.question + "\nA) " + curr_question.a  + "\nB) " + curr_question.b  + "\nC) " + curr_question.c  + "\nD) " + curr_question.d )
 	#15 sec timer to answer or Player shocked
 	question_timer.start()
 

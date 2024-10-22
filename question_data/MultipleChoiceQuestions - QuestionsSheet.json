@@ -1,0 +1,18 @@
+{
+  "1": {
+    "question": "This is an example question?",
+    "a": "Yes",
+    "b": "No",
+    "c": "Maybe",
+    "d": "What?",
+    "answer": "A"
+  },
+  "2": {
+    "question": "This is another example question?",
+    "a": "Yes",
+    "b": "No",
+    "c": "Maybe",
+    "d": "What?",
+    "answer": "A"
+  }
+}
