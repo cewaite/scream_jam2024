@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3 uid="uid://2fenrba40ao2"]
+[gd_scene load_steps=11 format=3 uid="uid://2fenrba40ao2"]
 
 [ext_resource type="Script" path="res://scenes/game_manager/game_manager.gd" id="1_v5cb4"]
 [ext_resource type="PackedScene" uid="uid://b5qjgpcdrcq8" path="res://scenes/the_room/the_room.tscn" id="2_1oe0i"]
@@ -8,6 +8,7 @@
 [ext_resource type="PackedScene" uid="uid://c7oicnc7370fn" path="res://ui/lose_screen/lose_screen.tscn" id="6_f66pt"]
 [ext_resource type="PackedScene" uid="uid://ed8suuq6xcqr" path="res://scenes/transition_screen/transition_screen.tscn" id="6_nt10t"]
 [ext_resource type="PackedScene" uid="uid://bkyifb2d8spg2" path="res://ui/win_screen/win_screen.tscn" id="7_dbsxc"]
+[ext_resource type="AudioStream" uid="uid://cuasmvjwp1ipu" path="res://assets/sfx/ELECTRIC BUZZ SOUND EFFECT .wav" id="9_61sp2"]
 
 [sub_resource type="Environment" id="Environment_vhmtg"]
 background_mode = 1
@@ -57,6 +58,24 @@ visible = false
 visible = false
 
 [node name="TransitionScreen" parent="." instance=ExtResource("6_nt10t")]
+
+[node name="BuzzAudioStreamPlayer" type="AudioStreamPlayer3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 31.1434, -2.54193)
+stream = ExtResource("9_61sp2")
+volume_db = -25.0
+autoplay = true
+
+[node name="PLayerShocksAudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+
+[node name="SubjectScreamAudioStreamPlayer" type="AudioStreamPlayer3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -102.031, 13.9996, 0)
+volume_db = -30.0
+bus = &"Shocks/Screams"
+
+[node name="SubjectShockAudioStreamPlayer" type="AudioStreamPlayer3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -102.031, 13.9996, 0)
+volume_db = -30.0
+bus = &"Shocks/Screams"
 
 [connection signal="timeout" from="QuestionTimer" to="." method="_on_question_timer_timeout"]
 [connection signal="restart" from="UI" to="." method="_on_ui_restart"]

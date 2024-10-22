@@ -4,6 +4,7 @@ enum LIGHT_EFFECT {BLINKING, SURGE}
 
 @onready var computer_screen = $ComputerScreen
 @onready var omni_light_3d = $Light/OmniLight3D
+@onready var flicker_audio_stream_player: AudioStreamPlayer3D = $Light/FlickerAudioStreamPlayer
 
 @onready var flicker_timer: Timer = $Light/FlickerTimer
 @export var flicker_freq: float = 10.0
@@ -37,6 +38,7 @@ func _process(delta):
 			pass
 
 func _on_flicker_timer_timeout():
+	flicker_audio_stream_player.play([0.0, 0.2, 0.35, 0.5].pick_random())
 	for i in range(randi_range(min_flicker_times, max_flicker_times)):
 		omni_light_3d.set_deferred("light_energy", original_light_energy * dim_mult)
 		await get_tree().create_timer(flicker_dur).timeout

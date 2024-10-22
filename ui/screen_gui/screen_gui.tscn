@@ -1,12 +1,18 @@
-[gd_scene load_steps=6 format=3 uid="uid://boiuapic68xir"]
+[gd_scene load_steps=12 format=3 uid="uid://boiuapic68xir"]
 
 [ext_resource type="Script" path="res://ui/screen_gui/screen_gui.gd" id="1_e1q16"]
 [ext_resource type="Texture2D" uid="uid://bw5kbi8nr30xk" path="res://assets/icons/power-lightning.svg" id="1_ulybx"]
+[ext_resource type="AudioStream" uid="uid://hq421wj5v5fn" path="res://assets/sfx/key_clicks/KeyClick_1.wav" id="2_4j3v1"]
 [ext_resource type="Texture2D" uid="uid://cknxl30pltbub" path="res://assets/icons/thunder-skull.svg" id="2_h648y"]
 [ext_resource type="Texture2D" uid="uid://b4a6rvf3px1lc" path="res://assets/icons/electric.svg" id="2_stuvd"]
+[ext_resource type="AudioStream" uid="uid://drop2b5h5k268" path="res://assets/sfx/key_clicks/KeyClick_2.wav" id="3_qm83y"]
 [ext_resource type="Texture2D" uid="uid://d36y4k2vsglcx" path="res://assets/icons/heavy-lightning.svg" id="4_ng3o6"]
+[ext_resource type="AudioStream" uid="uid://brdnfihwqkorm" path="res://assets/sfx/key_clicks/KeyClick_3.wav" id="4_phnm8"]
+[ext_resource type="AudioStream" uid="uid://c4ilwajyyfxg2" path="res://assets/sfx/key_clicks/KeyClick_4.wav" id="5_nlkg5"]
+[ext_resource type="AudioStream" uid="uid://bie2w1joqdogf" path="res://assets/sfx/key_clicks/KeyClick_5.wav" id="6_dva4g"]
+[ext_resource type="AudioStream" uid="uid://u3wk78xksjjn" path="res://assets/sfx/key_clicks/KeyClick_6.wav" id="7_vjxs2"]
 
-[node name="ScreenGUI" type="Control" node_paths=PackedStringArray("subject_strike_icons", "player_strike_icons")]
+[node name="ScreenGUI" type="Control" node_paths=PackedStringArray("subject_strike_icons", "player_strike_icons", "key_click_audio")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -20,6 +26,8 @@ size_flags_vertical = 3
 script = ExtResource("1_e1q16")
 subject_strike_icons = [NodePath("TopHBoxContainer/SubjectStrikesHBoxContainer/TextureRect3"), NodePath("TopHBoxContainer/SubjectStrikesHBoxContainer/TextureRect2"), NodePath("TopHBoxContainer/SubjectStrikesHBoxContainer/TextureRect"), NodePath("TopHBoxContainer/SubjectStrikesHBoxContainer/TextureRect4")]
 player_strike_icons = [NodePath("TopHBoxContainer/PlayerStrikesHBoxContainer/TextureRect"), NodePath("TopHBoxContainer/PlayerStrikesHBoxContainer/TextureRect2"), NodePath("TopHBoxContainer/PlayerStrikesHBoxContainer/TextureRect3"), NodePath("TopHBoxContainer/PlayerStrikesHBoxContainer/TextureRect4")]
+key_click_audio = NodePath("KeyClickAudioStreamPlayer3D")
+key_sfx = Array[AudioStream]([ExtResource("2_4j3v1"), ExtResource("3_qm83y"), ExtResource("4_phnm8"), ExtResource("5_nlkg5"), ExtResource("6_dva4g"), ExtResource("7_vjxs2")])
 
 [node name="ColorRect" type="ColorRect" parent="."]
 layout_mode = 1
@@ -168,6 +176,10 @@ layout_mode = 2
 texture = ExtResource("2_stuvd")
 expand_mode = 2
 
+[node name="KeyClickAudioStreamPlayer3D" type="AudioStreamPlayer3D" parent="."]
+volume_db = -20.0
+
+[connection signal="text_changed" from="InputVBoxContainer/LineEdit" to="." method="_on_line_edit_text_changed"]
 [connection signal="text_submitted" from="InputVBoxContainer/LineEdit" to="." method="_on_line_edit_text_submitted"]
 [connection signal="pressed" from="InputVBoxContainer/HBoxContainer/PauseButton" to="." method="_on_pause_button_pressed"]
 [connection signal="pressed" from="InputVBoxContainer/HBoxContainer/EnterButton" to="." method="_on_enter_button_pressed"]

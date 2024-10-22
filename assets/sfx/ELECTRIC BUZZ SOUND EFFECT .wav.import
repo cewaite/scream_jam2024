@@ -1,0 +1,24 @@
+[remap]
+
+importer="wav"
+type="AudioStreamWAV"
+uid="uid://cuasmvjwp1ipu"
+path="res://.godot/imported/ELECTRIC BUZZ SOUND EFFECT .wav-7ae54f9a43a5309a2451790369f8bc64.sample"
+
+[deps]
+
+source_file="res://assets/sfx/ELECTRIC BUZZ SOUND EFFECT .wav"
+dest_files=["res://.godot/imported/ELECTRIC BUZZ SOUND EFFECT .wav-7ae54f9a43a5309a2451790369f8bc64.sample"]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop_mode=2
+edit/loop_begin=17201
+edit/loop_end=-1
+compress/mode=0

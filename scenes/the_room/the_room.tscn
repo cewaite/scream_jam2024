@@ -1,4 +1,4 @@
-[gd_scene load_steps=30 format=3 uid="uid://b5qjgpcdrcq8"]
+[gd_scene load_steps=31 format=3 uid="uid://b5qjgpcdrcq8"]
 
 [ext_resource type="PackedScene" uid="uid://c6gcj26dp48a" path="res://assets/old_table/scene.gltf" id="1_c4vbn"]
 [ext_resource type="Texture2D" uid="uid://1v5aepmojj7u" path="res://assets/textures/grunge-wall-texture.jpg" id="1_h322l"]
@@ -11,6 +11,7 @@
 [ext_resource type="Texture2D" uid="uid://dc7a2j2egmyn7" path="res://assets/old_chair/textures/Chair_baseColor.png" id="6_nm7ye"]
 [ext_resource type="Texture2D" uid="uid://ddo102it046cq" path="res://assets/low_poly_light_bulb/textures/LMP0003_Textures_baseColor.png" id="8_ro7fp"]
 [ext_resource type="Texture2D" uid="uid://csbvu2t8p6ra1" path="res://assets/old_computer/textures/Computer_baseColor.png" id="9_ucknf"]
+[ext_resource type="AudioStream" uid="uid://rd2pexbam3sv" path="res://assets/sfx/Broken light bulb sound effect.wav" id="10_cmiak"]
 [ext_resource type="PackedScene" uid="uid://bcp5siu8dt6px" path="res://ui/computer_screen/computer_screen.tscn" id="12_34xau"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_x8qd6"]
@@ -280,6 +281,11 @@ omni_attenuation = 0.420448
 [node name="FlickerTimer" type="Timer" parent="Light"]
 
 [node name="SurgeTimer" type="Timer" parent="Light"]
+
+[node name="FlickerAudioStreamPlayer" type="AudioStreamPlayer3D" parent="Light"]
+stream = ExtResource("10_cmiak")
+volume_db = -20.0
+pitch_scale = 0.7
 
 [node name="Computer" parent="." instance=ExtResource("4_l08p0")]
 transform = Transform3D(-6.18079e-07, 0, -14.14, 0, 14.14, 0, 14.14, 0, -6.18079e-07, -0.578989, 10.8921, 2.39191)
