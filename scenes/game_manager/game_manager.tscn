@@ -1,27 +1,47 @@
-[gd_scene load_steps=11 format=3 uid="uid://2fenrba40ao2"]
+[gd_scene load_steps=24 format=3 uid="uid://2fenrba40ao2"]
 
 [ext_resource type="Script" path="res://scenes/game_manager/game_manager.gd" id="1_v5cb4"]
 [ext_resource type="PackedScene" uid="uid://b5qjgpcdrcq8" path="res://scenes/the_room/the_room.tscn" id="2_1oe0i"]
+[ext_resource type="AudioStream" uid="uid://bd1voj4cv8kq0" path="res://assets/sfx/screams/Low Pain 1.mp3" id="2_vktfy"]
+[ext_resource type="AudioStream" uid="uid://del8iq2txqatn" path="res://assets/sfx/screams/Low Pain 2.mp3" id="3_c3uut"]
 [ext_resource type="PackedScene" uid="uid://wgnj4rupwwno" path="res://ui/main_menu/main_menu.tscn" id="3_ndug5"]
 [ext_resource type="Script" path="res://ui/ui.gd" id="3_t6cev"]
+[ext_resource type="AudioStream" uid="uid://w6e87nd52j32" path="res://assets/sfx/screams/Low Pain 3.mp3" id="4_3px1i"]
 [ext_resource type="PackedScene" uid="uid://mwriol6rdmeq" path="res://ui/credits_page/credits_page.tscn" id="5_5m0y2"]
+[ext_resource type="AudioStream" uid="uid://0ow3yb4op0ry" path="res://assets/sfx/screams/Low Pain 4.mp3" id="5_nvx7w"]
+[ext_resource type="AudioStream" uid="uid://bab50k4a08cj3" path="res://assets/sfx/screams/Medium Pain 1.mp3" id="6_825tr"]
 [ext_resource type="PackedScene" uid="uid://c7oicnc7370fn" path="res://ui/lose_screen/lose_screen.tscn" id="6_f66pt"]
 [ext_resource type="PackedScene" uid="uid://ed8suuq6xcqr" path="res://scenes/transition_screen/transition_screen.tscn" id="6_nt10t"]
 [ext_resource type="PackedScene" uid="uid://bkyifb2d8spg2" path="res://ui/win_screen/win_screen.tscn" id="7_dbsxc"]
-[ext_resource type="AudioStream" uid="uid://cuasmvjwp1ipu" path="res://assets/sfx/ELECTRIC BUZZ SOUND EFFECT .wav" id="9_61sp2"]
+[ext_resource type="AudioStream" uid="uid://deyrsd4t3wrew" path="res://assets/sfx/screams/Medium Pain 2.mp3" id="7_w0yn4"]
+[ext_resource type="AudioStream" uid="uid://bwlvi8h2jk4j4" path="res://assets/sfx/screams/Medium Pain 3.mp3" id="8_gv8tl"]
+[ext_resource type="AudioStream" uid="uid://dwcg1lhogqrg5" path="res://assets/sfx/screams/Medium Pain 4.mp3" id="9_4jlgh"]
+[ext_resource type="AudioStream" uid="uid://b31lughm75wje" path="res://assets/sfx/shocks/Electricity Sound Effect.wav" id="10_nnm8a"]
+[ext_resource type="AudioStream" uid="uid://bxq1alu3nvaj4" path="res://assets/sfx/screams/High Pain 1.mp3" id="10_q4fcd"]
+[ext_resource type="AudioStream" uid="uid://b7rfbtg2u0k08" path="res://assets/sfx/screams/High Pain 2.mp3" id="11_4oxw7"]
+[ext_resource type="AudioStream" uid="uid://tgl3a8fbg750" path="res://assets/sfx/screams/High Pain 4.mp3" id="11_wupf8"]
+[ext_resource type="AudioStream" uid="uid://ct0yd5gu6tfs6" path="res://assets/sfx/screams/High Pain 3.mp3" id="12_cgqru"]
+[ext_resource type="PackedScene" uid="uid://vun7fnjgj12k" path="res://ui/pause_screen/pause_screen.tscn" id="20_njnpj"]
 
 [sub_resource type="Environment" id="Environment_vhmtg"]
 background_mode = 1
 ambient_light_color = Color(0.333333, 0.333333, 0.333333, 1)
 ambient_light_energy = 0.01
 
-[node name="GameManager" type="Node3D" node_paths=PackedStringArray("room", "camera", "seated_camera_marker", "hover_camera_marker", "question_timer", "ui", "transition_screen")]
+[node name="GameManager" type="Node3D" node_paths=PackedStringArray("room", "camera", "seated_camera_marker", "hover_camera_marker", "question_timer", "player_shock_audio_player", "subject_shock_audio_player", "subject_scream_audio_player", "ui", "transition_screen")]
+process_mode = 1
 script = ExtResource("1_v5cb4")
 room = NodePath("TheRoom")
 camera = NodePath("Camera3D")
 seated_camera_marker = NodePath("SeatedMarker")
 hover_camera_marker = NodePath("HoverMarker")
 question_timer = NodePath("QuestionTimer")
+player_shock_audio_player = NodePath("PlayerShockAudioStreamPlayer")
+subject_shock_audio_player = NodePath("SubjectShockAudioStreamPlayer")
+subject_scream_audio_player = NodePath("SubjectScreamAudioStreamPlayer")
+low_screams = Array[AudioStream]([ExtResource("2_vktfy"), ExtResource("3_c3uut"), ExtResource("4_3px1i"), ExtResource("5_nvx7w")])
+med_screams = Array[AudioStream]([ExtResource("6_825tr"), ExtResource("7_w0yn4"), ExtResource("8_gv8tl"), ExtResource("9_4jlgh")])
+high_screams = Array[AudioStream]([ExtResource("10_q4fcd"), ExtResource("11_4oxw7"), ExtResource("12_cgqru"), ExtResource("11_wupf8")])
 ui = NodePath("UI")
 transition_screen = NodePath("TransitionScreen")
 
@@ -57,24 +77,24 @@ visible = false
 [node name="WinScreen" parent="UI" instance=ExtResource("7_dbsxc")]
 visible = false
 
+[node name="PauseScreen" parent="UI" instance=ExtResource("20_njnpj")]
+visible = false
+
 [node name="TransitionScreen" parent="." instance=ExtResource("6_nt10t")]
 
-[node name="BuzzAudioStreamPlayer" type="AudioStreamPlayer3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 31.1434, -2.54193)
-stream = ExtResource("9_61sp2")
-volume_db = -25.0
-autoplay = true
-
-[node name="PLayerShocksAudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+[node name="PlayerShockAudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("10_nnm8a")
+volume_db = -20.0
 
 [node name="SubjectScreamAudioStreamPlayer" type="AudioStreamPlayer3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -102.031, 13.9996, 0)
-volume_db = -30.0
+volume_db = -10.0
+autoplay = true
 bus = &"Shocks/Screams"
 
 [node name="SubjectShockAudioStreamPlayer" type="AudioStreamPlayer3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -102.031, 13.9996, 0)
-volume_db = -30.0
+stream = ExtResource("10_nnm8a")
 bus = &"Shocks/Screams"
 
 [connection signal="timeout" from="QuestionTimer" to="." method="_on_question_timer_timeout"]

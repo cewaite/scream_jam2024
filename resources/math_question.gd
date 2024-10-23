@@ -7,16 +7,28 @@ var answer: int
 
 func generate_question():
 	randomize()
-	var operators = ["+", "-", "*"]
-	operator = operators.pick_random()
 	match self.difficulty:
 		DIFFICULTY.EASY:
+			var operators = ["+", "-", "*"]
+			operator = operators.pick_random()
 			num1 = randi_range(1, 9)
 			num2 = randi_range(1, 9)
 		DIFFICULTY.MEDIUM:
-			num1 = randi_range(10, 99)
-			num2 = randi_range(10, 99)
+			var operators = ["+", "-", "*"]
+			operator = operators.pick_random()
+			match operator:
+				"+":
+					num1 = randi_range(10, 99)
+					num2 = randi_range(10, 99)
+				"-":
+					num1 = randi_range(10, 99)
+					num2 = randi_range(10, 99)
+				"*":
+					num1 = randi_range(10, 99)
+					num2 = randi_range(1, 9)
 		DIFFICULTY.HARD:
+			var operators = ["+", "-"]
+			operator = operators.pick_random()
 			num1 = randi_range(100, 999)
 			num2 = randi_range(100, 999)
 	calc_answer()

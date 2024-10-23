@@ -1,0 +1,24 @@
+[remap]
+
+importer="wav"
+type="AudioStreamWAV"
+uid="uid://dt0s5g34p207l"
+path="res://.godot/imported/Microsoft Teams Message Sound Notification DOWNPITCH SPEDUP.wav-aa137863e51235e3158863d44ea1adcc.sample"
+
+[deps]
+
+source_file="res://assets/sfx/Microsoft Teams Message Sound Notification DOWNPITCH SPEDUP.wav"
+dest_files=["res://.godot/imported/Microsoft Teams Message Sound Notification DOWNPITCH SPEDUP.wav-aa137863e51235e3158863d44ea1adcc.sample"]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=true
+edit/normalize=false
+edit/loop_mode=0
+edit/loop_begin=0
+edit/loop_end=-1
+compress/mode=0

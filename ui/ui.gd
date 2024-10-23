@@ -6,6 +6,7 @@ signal restart()
 @onready var option_menu = $OptionMenu
 @onready var lose_screen = $LoseScreen
 @onready var win_screen = $WinScreen
+@onready var pause_screen = $PauseScreen
 
 func show_lose_screen(msg : String):
 	#lose_screen.mouse_filter = Control.MOUSE_FILTER_STOP
@@ -17,6 +18,9 @@ func show_win_screen(msg : String):
 	win_screen.message_label.text = msg
 	win_screen.visible = true
 	win_screen.play_animation()
+
+func show_pause_screen():
+	pause_screen.visible = true
 
 func _on_main_menu_start_game():
 	main_menu.visible = false

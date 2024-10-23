@@ -7,7 +7,8 @@ enum LIGHT_EFFECT {BLINKING, SURGE}
 @onready var flicker_audio_stream_player: AudioStreamPlayer3D = $Light/FlickerAudioStreamPlayer
 
 @onready var flicker_timer: Timer = $Light/FlickerTimer
-@export var flicker_freq: float = 10.0
+@export var max_flicker_freq: float = 10.0
+@export var min_flicker_freq: float = 2.0
 @export var flicker_dur: float = 0.2
 @export var max_flicker_times: int = 3
 @export var min_flicker_times: int = 1
@@ -26,7 +27,7 @@ var original_light_energy: float
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	original_light_energy = omni_light_3d.light_energy
-	flicker_timer.start(randf_range(0, flicker_freq))
+	flicker_timer.start(randf_range(min_flicker_freq, max_flicker_freq))
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -44,7 +45,7 @@ func _on_flicker_timer_timeout():
 		await get_tree().create_timer(flicker_dur).timeout
 		omni_light_3d.set_deferred("light_energy", original_light_energy)
 		await get_tree().create_timer(flicker_dur).timeout
-	flicker_timer.start(randf_range(0, flicker_freq))
+	flicker_timer.start(randf_range(min_flicker_freq, max_flicker_freq))
 
 func power_surge_on():
 	flicker_timer.stop()
@@ -53,7 +54,7 @@ func power_surge_on():
 func power_surge_off():
 	surge_timer.stop()
 	omni_light_3d.set_deferred("light_energy", original_light_energy)
-	flicker_timer.start(randf_range(0, flicker_freq))
+	flicker_timer.start(randf_range(min_flicker_freq, max_flicker_freq))
 	
 
 

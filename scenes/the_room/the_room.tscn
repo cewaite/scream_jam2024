@@ -1,4 +1,4 @@
-[gd_scene load_steps=31 format=3 uid="uid://b5qjgpcdrcq8"]
+[gd_scene load_steps=32 format=3 uid="uid://b5qjgpcdrcq8"]
 
 [ext_resource type="PackedScene" uid="uid://c6gcj26dp48a" path="res://assets/old_table/scene.gltf" id="1_c4vbn"]
 [ext_resource type="Texture2D" uid="uid://1v5aepmojj7u" path="res://assets/textures/grunge-wall-texture.jpg" id="1_h322l"]
@@ -13,6 +13,7 @@
 [ext_resource type="Texture2D" uid="uid://csbvu2t8p6ra1" path="res://assets/old_computer/textures/Computer_baseColor.png" id="9_ucknf"]
 [ext_resource type="AudioStream" uid="uid://rd2pexbam3sv" path="res://assets/sfx/Broken light bulb sound effect.wav" id="10_cmiak"]
 [ext_resource type="PackedScene" uid="uid://bcp5siu8dt6px" path="res://ui/computer_screen/computer_screen.tscn" id="12_34xau"]
+[ext_resource type="AudioStream" uid="uid://cuasmvjwp1ipu" path="res://assets/sfx/ELECTRIC BUZZ SOUND EFFECT .wav" id="14_gl16b"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_x8qd6"]
 albedo_color = Color(0.47451, 0.47451, 0.47451, 1)
@@ -284,7 +285,7 @@ omni_attenuation = 0.420448
 
 [node name="FlickerAudioStreamPlayer" type="AudioStreamPlayer3D" parent="Light"]
 stream = ExtResource("10_cmiak")
-volume_db = -20.0
+volume_db = -30.0
 pitch_scale = 0.7
 
 [node name="Computer" parent="." instance=ExtResource("4_l08p0")]
@@ -296,6 +297,12 @@ mesh = SubResource("ArrayMesh_yue3w")
 
 [node name="ComputerScreen" parent="." instance=ExtResource("12_34xau")]
 transform = Transform3D(3.86495, -0.0158859, 0, 0.020237, 3.03396, 0, 0, 0, 3.063, -0.652769, 13.655, 1.903)
+
+[node name="BuzzAudioStreamPlayer" type="AudioStreamPlayer3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 31.1434, -2.54193)
+stream = ExtResource("14_gl16b")
+volume_db = -30.0
+autoplay = true
 
 [connection signal="timeout" from="Light/FlickerTimer" to="." method="_on_flicker_timer_timeout"]
 [connection signal="timeout" from="Light/SurgeTimer" to="." method="_on_surge_timer_timeout"]

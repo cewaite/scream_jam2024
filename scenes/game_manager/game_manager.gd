@@ -16,7 +16,15 @@ const SUBJECT = preload("res://entities/subject/subject.tscn")
 @export var question_timer: Timer
 # Higher = more mc, lower = more math
 @export var mc_to_math_ratio: float = 0.5
-@export var question_until_win: int = 20
+@export var question_until_win: int = 10
+
+@export var player_shock_audio_player: AudioStreamPlayer
+@export var subject_shock_audio_player: AudioStreamPlayer3D
+@export var subject_scream_audio_player: AudioStreamPlayer3D
+@export var low_screams: Array[AudioStream]
+@export var med_screams: Array[AudioStream]
+@export var high_screams: Array[AudioStream]
+@export var first_shock_dur: float = 2.0
 
 @export var ui: UI
 @export var transition_screen: TransitionScreen
@@ -29,12 +37,14 @@ var players_strikes: int = 0
 var subjects_strikes: int = 0
 var bad_answers: int = 0
 var curr_question: Question
+var curr_difficulty: Question.DIFFICULTY = Question.DIFFICULTY.EASY
 
 var total_questions: int = 0
 var unanswered_questions: int = 0
 var wrong_answers: int = 0
 
 var subject: Subject
+var prev_scream: AudioStream
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -48,6 +58,8 @@ func _ready():
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
+
+	
 	match curr_game_state:
 		
 		GAME_STATE.MAIN_MENU:
@@ -64,7 +76,13 @@ func _process(delta):
 				send_intro()
 		
 		GAME_STATE.PLAYING:
+			if Input.is_action_just_pressed("escape"):
+				get_tree().paused = true
+				ui.show_pause_screen()
+			
 			screen.screen_gui.timer_label.text = str(question_timer.time_left).pad_decimals(2)
+			if subject_shock_audio_player.is_playing() and !subject_scream_audio_player.is_playing():
+				make_subject_scream()
 
 func send_intro():
 	var intro_msgs = [
@@ -79,7 +97,8 @@ func send_intro():
 	for msg in intro_msgs:
 		var full_msg = "[b]Proctor:[/b] " + msg
 		screen.add_message(full_msg)
-		await get_tree().create_timer(5.0).timeout
+		if msg != intro_msgs[intro_msgs.size() - 1]:
+			await get_tree().create_timer(5.0).timeout
 	screen.screen_gui.toggle_enter_button()
 
 func _on_main_menu_start_game():
@@ -107,13 +126,13 @@ func _on_screen_gui_submit_answer(answer : String):
 	else:
 		if not answer or answer.is_empty():
 			screen.add_message("[b]Proctor:[/b] NULL values will not be tolerated. Submit an answer.")
-			handle_bad_answer()
+			await handle_bad_answer()
 		elif curr_question is MathQuestion and not answer.is_valid_int():
 			screen.add_message("[b]Proctor:[/b] Mathmatic's require numerical answer, formatted logically. Try again.")
-			handle_bad_answer()
+			await handle_bad_answer()
 		elif curr_question is MCQuestion and answer != "A" and answer != "B" and answer != "C" and answer != "D" and answer != curr_question.a and answer != curr_question.b and answer != curr_question.c and answer != curr_question.d:
 			screen.add_message("[b]Proctor:[/b] An answer of A, B, C, or D is required. Try Again.")
-			handle_bad_answer()
+			await handle_bad_answer()
 		else:
 			# Stop Timer
 			question_timer.stop()
@@ -134,8 +153,7 @@ func _on_screen_gui_submit_answer(answer : String):
 				screen.add_message("[b]Proctor:[/b] Subjects answer concurs with the truth.")
 			else:
 				screen.add_message("[b]Proctor:[/b] Subjects answer differed from the truth. Administering [i]corrective action[/i].")
-				await get_tree().create_timer(2.0).timeout
-				strike_subject()
+				await strike_subject()
 			check_ending_or_cont()
 	screen.screen_gui.toggle_enter_button()
 
@@ -147,8 +165,7 @@ func handle_bad_answer():
 		bad_answers = 0
 		await get_tree().create_timer(5.0).timeout
 		screen.add_message("[b]Proctor:[/b] Too many bad answers. Disappointing. Administering [i]corrective action[/i].")
-		strike_player()
-		await get_tree().create_timer(2.0).timeout
+		await strike_player()
 		screen.add_message("[b]Proctor:[/b] Next question...")
 		ask_question()
 		screen.screen_gui.toggle_enter_button()
@@ -166,10 +183,15 @@ func check_ending_or_cont():
 		win_game()
 
 func ask_question():
+	if total_questions >= 3:
+		curr_difficulty = Question.DIFFICULTY.MEDIUM
+	if total_questions >= 8:
+		curr_difficulty = Question.DIFFICULTY.HARD
+	
 	#Proctor asks question
 	if randf() >= mc_to_math_ratio or QuestionData.mc_questions.is_empty():
 		curr_question = MathQuestion.new()
-		curr_question.difficulty = Question.DIFFICULTY.EASY
+		curr_question.difficulty = curr_difficulty
 		curr_question.generate_question()
 		screen.add_message("-----------------------------------------------------------")
 		screen.add_message("[b]Proctor:[/b] What is " + curr_question.question_to_string() + "?")
@@ -214,14 +236,42 @@ func win_game():
 
 func strike_subject():
 	subjects_strikes += 1
+	await get_tree().create_timer(2.0).timeout
 	screen.screen_gui.show_subject_strikes(subjects_strikes)
+	subject_shock_audio_player.play(randf_range(0, 20.0))
+	make_subject_scream()
+	await get_tree().create_timer(first_shock_dur * subjects_strikes).timeout
+	subject_shock_audio_player.stop()
+	#subject_scream_audio_player.stop()
+	
+func make_subject_scream():
+	var scream_picked = null
+	if subjects_strikes == 2:
+		scream_picked = low_screams.pick_random()
+	if subjects_strikes == 3:
+		scream_picked = med_screams.pick_random()
+	if subjects_strikes == 4:
+		scream_picked = high_screams.pick_random()
+	if prev_scream and scream_picked and scream_picked == prev_scream:
+		make_subject_scream()
+	else:
+		prev_scream = scream_picked
+		subject_scream_audio_player.stream = scream_picked
+		subject_scream_audio_player.play()
 
 func strike_player():
 	players_strikes += 1
+	await get_tree().create_timer(2.0).timeout
 	screen.screen_gui.show_player_strikes(players_strikes)
+	room.power_surge_on()
+	player_shock_audio_player.play(randf_range(0, 20.0))
+	await get_tree().create_timer(first_shock_dur * players_strikes).timeout
+	player_shock_audio_player.stop()
+	room.power_surge_off()
+	
 
 func _on_screen_gui_pause():
-	pass # Replace with function body.
+	screen.add_message("[b]Proctor:[/b] Unavailable. Experiment too urgent.")
 
 func _on_question_timer_timeout():
 	question_timer.stop()
@@ -229,8 +279,7 @@ func _on_question_timer_timeout():
 	unanswered_questions += 1
 	await get_tree().create_timer(2.0).timeout
 	screen.add_message("[b]Proctor:[/b] " + player_name + " failed to answer. Administering [i]corrective action[/i].")
-	await get_tree().create_timer(2.0).timeout
-	strike_player()
+	await strike_player()
 	check_ending_or_cont()
 	screen.screen_gui.toggle_enter_button()
 	
@@ -244,6 +293,7 @@ func _on_ui_restart():
 	subjects_strikes = 0
 	bad_answers = 0
 	curr_question = null
+	curr_difficulty = Question.DIFFICULTY.EASY
 	
 	total_questions = 0
 	unanswered_questions = 0

@@ -1,8 +1,9 @@
-[gd_scene load_steps=9 format=3 uid="uid://bcp5siu8dt6px"]
+[gd_scene load_steps=10 format=3 uid="uid://bcp5siu8dt6px"]
 
 [ext_resource type="Script" path="res://ui/computer_screen/computer_screen.gd" id="1_l3lwo"]
 [ext_resource type="PackedScene" uid="uid://boiuapic68xir" path="res://ui/screen_gui/screen_gui.tscn" id="2_xb63s"]
 [ext_resource type="Shader" path="res://assets/shaders/vhs_shader.gdshader" id="3_bkhtv"]
+[ext_resource type="AudioStream" uid="uid://dt0s5g34p207l" path="res://assets/sfx/Microsoft Teams Message Sound Notification DOWNPITCH SPEDUP.wav" id="4_gy66d"]
 
 [sub_resource type="ViewportTexture" id="ViewportTexture_pquyo"]
 viewport_path = NodePath("SubViewport")
@@ -71,3 +72,8 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
+
+[node name="ChatPingAudioStreamPlayer" type="AudioStreamPlayer3D" parent="."]
+stream = ExtResource("4_gy66d")
+volume_db = -40.0
+pitch_scale = 0.5

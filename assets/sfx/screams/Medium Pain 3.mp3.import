@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://bwlvi8h2jk4j4"
+path="res://.godot/imported/Medium Pain 3.mp3-664aa0d157e1c53dda76bdef9fc4fe1d.mp3str"
+
+[deps]
+
+source_file="res://assets/sfx/screams/Medium Pain 3.mp3"
+dest_files=["res://.godot/imported/Medium Pain 3.mp3-664aa0d157e1c53dda76bdef9fc4fe1d.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

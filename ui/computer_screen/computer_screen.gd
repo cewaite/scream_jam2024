@@ -6,6 +6,7 @@ const CHAT_RTL = preload("res://ui/screen_gui/chat_rtl.tscn")
 @onready var viewport = $SubViewport
 @onready var area = $Area
 @onready var screen_gui: ScreenGUI = $SubViewport/ScreenGUI
+@onready var chat_ping_audio_stream_player = $ChatPingAudioStreamPlayer
 
 var mesh_size: Vector2 = Vector2()
 
@@ -23,6 +24,7 @@ func _ready():
 	viewport.set_process_input(true)
 
 func add_message(msg : String):
+	chat_ping_audio_stream_player.play()
 	var new_chat = CHAT_RTL.instantiate() as RichTextLabel
 	new_chat.text = msg
 	screen_gui.chat_container.add_child(new_chat)
