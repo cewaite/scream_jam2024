@@ -42,6 +42,8 @@ var curr_difficulty: Question.DIFFICULTY = Question.DIFFICULTY.EASY
 var total_questions: int = 0
 var unanswered_questions: int = 0
 var wrong_answers: int = 0
+var pause_attempts: int = 0
+var actual_pauses: int = 0
 
 var subject: Subject
 var prev_scream: AudioStream
@@ -79,6 +81,7 @@ func _process(delta):
 			if Input.is_action_just_pressed("escape"):
 				get_tree().paused = true
 				ui.show_pause_screen()
+				actual_pauses += 1
 			
 			screen.screen_gui.timer_label.text = str(question_timer.time_left).pad_decimals(2)
 			if subject_shock_audio_player.is_playing() and !subject_scream_audio_player.is_playing():
@@ -228,11 +231,15 @@ func win_game():
 	screen.screen_gui.toggle_enter_button()
 	await get_tree().create_timer(5.0).timeout
 	screen.add_message("[b]Proctor:[/b] All questions answered. Experiment complete...")
-	await get_tree().create_timer(5.0).timeout	
+	await get_tree().create_timer(5.0).timeout
 	# Play chat sfx then show lose screen
-	ui.show_win_screen("[center][b]Subject:[/b] Thank you, " + player_name + ". Thank you...[/center]")
+	if actual_pauses < 5:
+		ui.show_win_screen("[center][b]Subject:[/b] Thank you, " + player_name + ". Thank you...[/center]")
+	else:
+		ui.show_win_screen("[center][b]Subject:[/b] Only God had the power to save me... by cheating.")
 	await get_tree().create_timer(2.0).timeout
 	#play sfx
+	$UI/ChatPingAudioStreamPlayer.play()
 
 func strike_subject():
 	subjects_strikes += 1
@@ -271,7 +278,9 @@ func strike_player():
 	
 
 func _on_screen_gui_pause():
-	screen.add_message("[b]Proctor:[/b] Unavailable. Experiment too urgent.")
+	pause_attempts += 1
+	if pause_attempts <= 3:
+		screen.add_message("[b]Proctor:[/b] Unavailable. Experiment too urgent.")
 
 func _on_question_timer_timeout():
 	question_timer.stop()
@@ -298,6 +307,8 @@ func _on_ui_restart():
 	total_questions = 0
 	unanswered_questions = 0
 	wrong_answers = 0
+	pause_attempts = 0
+	actual_pauses = 0
 	
 	# Clear screen strike markers and timer
 	screen.screen_gui.clear_screen()

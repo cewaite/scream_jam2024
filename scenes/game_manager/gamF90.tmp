@@ -1,4 +1,4 @@
-[gd_scene load_steps=25 format=3 uid="uid://2fenrba40ao2"]
+[gd_scene load_steps=24 format=3 uid="uid://2fenrba40ao2"]
 
 [ext_resource type="Script" path="res://scenes/game_manager/game_manager.gd" id="1_v5cb4"]
 [ext_resource type="PackedScene" uid="uid://b5qjgpcdrcq8" path="res://scenes/the_room/the_room.tscn" id="2_1oe0i"]
@@ -22,7 +22,6 @@
 [ext_resource type="AudioStream" uid="uid://tgl3a8fbg750" path="res://assets/sfx/screams/High Pain 4.mp3" id="11_wupf8"]
 [ext_resource type="AudioStream" uid="uid://ct0yd5gu6tfs6" path="res://assets/sfx/screams/High Pain 3.mp3" id="12_cgqru"]
 [ext_resource type="PackedScene" uid="uid://vun7fnjgj12k" path="res://ui/pause_screen/pause_screen.tscn" id="20_njnpj"]
-[ext_resource type="AudioStream" uid="uid://dt0s5g34p207l" path="res://assets/sfx/Microsoft Teams Message Sound Notification DOWNPITCH SPEDUP.wav" id="21_hsqpi"]
 
 [sub_resource type="Environment" id="Environment_vhmtg"]
 background_mode = 1
@@ -80,11 +79,6 @@ visible = false
 
 [node name="PauseScreen" parent="UI" instance=ExtResource("20_njnpj")]
 visible = false
-
-[node name="ChatPingAudioStreamPlayer" type="AudioStreamPlayer" parent="UI"]
-stream = ExtResource("21_hsqpi")
-volume_db = -40.0
-pitch_scale = 0.5
 
 [node name="TransitionScreen" parent="." instance=ExtResource("6_nt10t")]
 

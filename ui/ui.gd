@@ -8,6 +8,7 @@ signal restart()
 @onready var win_screen = $WinScreen
 @onready var pause_screen = $PauseScreen
 
+
 func show_lose_screen(msg : String):
 	#lose_screen.mouse_filter = Control.MOUSE_FILTER_STOP
 	lose_screen.message_label.text = msg

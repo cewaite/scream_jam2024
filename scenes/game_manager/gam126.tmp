@@ -1,5 +1,6 @@
 [gd_scene load_steps=25 format=3 uid="uid://2fenrba40ao2"]
 
+[ext_resource type="Script" path="res://globals/pausing_parent.gd" id="1_q5gyf"]
 [ext_resource type="Script" path="res://scenes/game_manager/game_manager.gd" id="1_v5cb4"]
 [ext_resource type="PackedScene" uid="uid://b5qjgpcdrcq8" path="res://scenes/the_room/the_room.tscn" id="2_1oe0i"]
 [ext_resource type="AudioStream" uid="uid://bd1voj4cv8kq0" path="res://assets/sfx/screams/Low Pain 1.mp3" id="2_vktfy"]
@@ -22,14 +23,16 @@
 [ext_resource type="AudioStream" uid="uid://tgl3a8fbg750" path="res://assets/sfx/screams/High Pain 4.mp3" id="11_wupf8"]
 [ext_resource type="AudioStream" uid="uid://ct0yd5gu6tfs6" path="res://assets/sfx/screams/High Pain 3.mp3" id="12_cgqru"]
 [ext_resource type="PackedScene" uid="uid://vun7fnjgj12k" path="res://ui/pause_screen/pause_screen.tscn" id="20_njnpj"]
-[ext_resource type="AudioStream" uid="uid://dt0s5g34p207l" path="res://assets/sfx/Microsoft Teams Message Sound Notification DOWNPITCH SPEDUP.wav" id="21_hsqpi"]
 
 [sub_resource type="Environment" id="Environment_vhmtg"]
 background_mode = 1
 ambient_light_color = Color(0.333333, 0.333333, 0.333333, 1)
 ambient_light_energy = 0.01
 
-[node name="GameManager" type="Node3D" node_paths=PackedStringArray("room", "camera", "seated_camera_marker", "hover_camera_marker", "question_timer", "player_shock_audio_player", "subject_shock_audio_player", "subject_scream_audio_player", "ui", "transition_screen")]
+[node name="PausingParent" type="Node"]
+script = ExtResource("1_q5gyf")
+
+[node name="GameManager" type="Node3D" parent="." node_paths=PackedStringArray("room", "camera", "seated_camera_marker", "hover_camera_marker", "question_timer", "player_shock_audio_player", "subject_shock_audio_player", "subject_scream_audio_player", "ui", "transition_screen")]
 process_mode = 1
 script = ExtResource("1_v5cb4")
 room = NodePath("TheRoom")
@@ -46,68 +49,63 @@ high_screams = Array[AudioStream]([ExtResource("10_q4fcd"), ExtResource("11_4oxw
 ui = NodePath("UI")
 transition_screen = NodePath("TransitionScreen")
 
-[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+[node name="WorldEnvironment" type="WorldEnvironment" parent="GameManager"]
 environment = SubResource("Environment_vhmtg")
 
-[node name="Camera3D" type="Camera3D" parent="."]
+[node name="Camera3D" type="Camera3D" parent="GameManager"]
 transform = Transform3D(1, 0, 0, 0, 0.887011, 0.461749, 0, -0.461749, 0.887011, 0, 24.7029, 25.4498)
 
-[node name="TheRoom" parent="." instance=ExtResource("2_1oe0i")]
+[node name="TheRoom" parent="GameManager" instance=ExtResource("2_1oe0i")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -8)
 
-[node name="SeatedMarker" type="Marker3D" parent="."]
+[node name="SeatedMarker" type="Marker3D" parent="GameManager"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.260681, 13.5659, -2.73128)
 
-[node name="HoverMarker" type="Marker3D" parent="."]
+[node name="HoverMarker" type="Marker3D" parent="GameManager"]
 transform = Transform3D(1, 0, 0, 0, 0.887011, 0.461749, 0, -0.461749, 0.887011, 0, 24.7029, 25.4498)
 
-[node name="QuestionTimer" type="Timer" parent="."]
+[node name="QuestionTimer" type="Timer" parent="GameManager"]
 wait_time = 10.0
 
-[node name="UI" type="CanvasLayer" parent="."]
+[node name="UI" type="CanvasLayer" parent="GameManager"]
 script = ExtResource("3_t6cev")
 
-[node name="MainMenu" parent="UI" instance=ExtResource("3_ndug5")]
+[node name="MainMenu" parent="GameManager/UI" instance=ExtResource("3_ndug5")]
 
-[node name="OptionMenu" parent="UI" instance=ExtResource("5_5m0y2")]
+[node name="OptionMenu" parent="GameManager/UI" instance=ExtResource("5_5m0y2")]
 visible = false
 
-[node name="LoseScreen" parent="UI" instance=ExtResource("6_f66pt")]
+[node name="LoseScreen" parent="GameManager/UI" instance=ExtResource("6_f66pt")]
 visible = false
 
-[node name="WinScreen" parent="UI" instance=ExtResource("7_dbsxc")]
+[node name="WinScreen" parent="GameManager/UI" instance=ExtResource("7_dbsxc")]
 visible = false
 
-[node name="PauseScreen" parent="UI" instance=ExtResource("20_njnpj")]
+[node name="PauseScreen" parent="GameManager/UI" instance=ExtResource("20_njnpj")]
 visible = false
 
-[node name="ChatPingAudioStreamPlayer" type="AudioStreamPlayer" parent="UI"]
-stream = ExtResource("21_hsqpi")
-volume_db = -40.0
-pitch_scale = 0.5
+[node name="TransitionScreen" parent="GameManager" instance=ExtResource("6_nt10t")]
 
-[node name="TransitionScreen" parent="." instance=ExtResource("6_nt10t")]
-
-[node name="PlayerShockAudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+[node name="PlayerShockAudioStreamPlayer" type="AudioStreamPlayer" parent="GameManager"]
 stream = ExtResource("10_nnm8a")
 volume_db = -20.0
 
-[node name="SubjectScreamAudioStreamPlayer" type="AudioStreamPlayer3D" parent="."]
+[node name="SubjectScreamAudioStreamPlayer" type="AudioStreamPlayer3D" parent="GameManager"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -102.031, 13.9996, 0)
 volume_db = -10.0
 autoplay = true
 bus = &"Shocks/Screams"
 
-[node name="SubjectShockAudioStreamPlayer" type="AudioStreamPlayer3D" parent="."]
+[node name="SubjectShockAudioStreamPlayer" type="AudioStreamPlayer3D" parent="GameManager"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -102.031, 13.9996, 0)
 stream = ExtResource("10_nnm8a")
 bus = &"Shocks/Screams"
 
-[connection signal="timeout" from="QuestionTimer" to="." method="_on_question_timer_timeout"]
-[connection signal="restart" from="UI" to="." method="_on_ui_restart"]
-[connection signal="open_options" from="UI/MainMenu" to="UI" method="_on_main_menu_open_options"]
-[connection signal="start_game" from="UI/MainMenu" to="." method="_on_main_menu_start_game"]
-[connection signal="start_game" from="UI/MainMenu" to="UI" method="_on_main_menu_start_game"]
-[connection signal="back" from="UI/OptionMenu" to="UI" method="_on_option_menu_back"]
-[connection signal="retry" from="UI/LoseScreen" to="UI" method="_on_lose_screen_retry"]
-[connection signal="play_again" from="UI/WinScreen" to="UI" method="_on_win_screen_play_again"]
+[connection signal="timeout" from="GameManager/QuestionTimer" to="GameManager" method="_on_question_timer_timeout"]
+[connection signal="restart" from="GameManager/UI" to="GameManager" method="_on_ui_restart"]
+[connection signal="open_options" from="GameManager/UI/MainMenu" to="GameManager/UI" method="_on_main_menu_open_options"]
+[connection signal="start_game" from="GameManager/UI/MainMenu" to="GameManager" method="_on_main_menu_start_game"]
+[connection signal="start_game" from="GameManager/UI/MainMenu" to="GameManager/UI" method="_on_main_menu_start_game"]
+[connection signal="back" from="GameManager/UI/OptionMenu" to="GameManager/UI" method="_on_option_menu_back"]
+[connection signal="retry" from="GameManager/UI/LoseScreen" to="GameManager/UI" method="_on_lose_screen_retry"]
+[connection signal="play_again" from="GameManager/UI/WinScreen" to="GameManager/UI" method="_on_win_screen_play_again"]
